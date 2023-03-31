@@ -39,6 +39,9 @@ app.use((req, res, next) => {
   next();
 });
 
+
+
+
 app.get("/", (req, res) => {
   res.send("Express + TypeScript Server ssmss");
 });
@@ -48,7 +51,7 @@ app.get("/api", (req, res) => {
 });
 
 app.get("/api/users", async (req, res) => {
-  const ar = await db.select("name").from("users");
+  const ar = (await db.select("*").from("users")).at(0);
 
   res.send(ar);
 });

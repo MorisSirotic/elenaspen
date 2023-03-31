@@ -6,20 +6,16 @@ import { Top } from "./components/Top";
 import axios from "axios";
 
 type Props = {
-  message: string;
+  id: string;
+  name: string;
 };
 export const App = () => {
- 
-
-  const [message, setMessage] = useState<Props>({ message: "kmkmkm" });
+  const [user, setuser] = useState<Props>();
 
   useEffect(() => {
-
-    axios.get<Props>("http://localhost:8000/api").then((val) => {
-
-    console.log(val);
-    
-      setMessage(val.data);
+    axios.get<Props>("http://localhost:8000/api/users").then((val) => {
+      setuser(val.data);
+      console.log(val.data);
     });
   }, []);
 
@@ -31,7 +27,7 @@ export const App = () => {
 
       <Footer />
 
-      {message.message}
+      {user?.name}
     </div>
   );
 };
