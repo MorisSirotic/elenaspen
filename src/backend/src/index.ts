@@ -6,7 +6,7 @@ dotenv.config();
 
 const app = express();
 
-const { DB_USER, DB_PASSWORD, DB_PORT, DB_HOST, DB_NAME, DB_CLIENT, PORT } =
+const { PORT } =
   process.env;
 
 app.use((req, res, next) => {
@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("Express + TypeScript Server sssmssd");
+  res.send("Express + TypeScript Server sssmssssd");
 });
 
 app.get("/api", (req, res) => {

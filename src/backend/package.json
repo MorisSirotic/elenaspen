@@ -6,9 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "nodemon dist/index.js",
-    "dev": "ts-node src/index.ts",
-    "dev2": "ts-node-dev --respawn --transpile-only  src/index.ts",
-    "start2": "ts-node-dev --respawn --transpileOnly src/index.ts"
+    "_dev": "ts-node src/index.ts",
+    "dev": "ts-node-dev --respawn --transpile-only  src/index.ts"
   },
   "keywords": [],
   "author": "",

@@ -1,12 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-
 const { DB_USER, DB_PASSWORD, DB_PORT, DB_HOST, DB_NAME, DB_CLIENT } =
 process.env;
-console.log("MKJKMMKMKKMKMMKMKMKMK");
-console.log(DB_USER);
-
 
 export default {
     client: DB_CLIENT,
