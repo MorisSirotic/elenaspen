@@ -4,6 +4,7 @@ import { Footer } from "./components/Footer";
 import { Navbar } from "./components/Navbar";
 import { Top } from "./components/Top";
 import axios from "axios";
+import { MyComponent } from "./components/stateful/MyComponent";
 
 type Props = {
   id: string;
@@ -28,6 +29,9 @@ export const App = () => {
       <Footer />
 
       {user?.name}
+
+
+      <MyComponent/>
     </div>
   );
 };
