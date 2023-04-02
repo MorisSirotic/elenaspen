@@ -1,5 +1,7 @@
 import { Model } from "objection";
 import db from "../db";
+import { CartItem } from "./CartItem";
+import { User } from "./User";
 
 Model.knex(db);
 
@@ -9,9 +11,6 @@ export class Cart extends Model {
     }
   
     static get relationMappings() {
-      const User = require('./User');
-      const CartItem = require('./CartItem');
-  
       return {
         user: {
           relation: Model.BelongsToOneRelation,
@@ -21,7 +20,7 @@ export class Cart extends Model {
             to: 'users.id',
           },
         },
-        items: {
+        cart_items: {
           relation: Model.HasManyRelation,
           modelClass: CartItem,
           join: {

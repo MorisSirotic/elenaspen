@@ -1,17 +1,16 @@
-import express from "express";
 import dotenv from "dotenv";
-import db from "./db";
+import express from "express";
+import { products } from "./api/product-api";
 import { users } from "./api/user-api";
-import { Model } from "objection";
+import db from "./db";
+import { carts } from "./api/cart-api";
+import { cartItems } from "./api/cart_item-api";
 
 dotenv.config();
 
 const app = express();
 
-
-
-const { PORT } =
-  process.env;
+const { PORT } = process.env;
 
 app.use((req, res, next) => {
   const allowedOrigins = ["http://localhost:5173", "http://localhost:8000"]; // Update with your frontend's origin
@@ -32,8 +31,11 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
+app.use("/users", users);
+app.use("/products", products);
+app.use("/carts", carts);
+app.use("/carts", cartItems);
 
-app.use("/users",users);
 
 app.get("/", (req, res) => {
   res.send("Express + TypeScript Server sssmssssd");

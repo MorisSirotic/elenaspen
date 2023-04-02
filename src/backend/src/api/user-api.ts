@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import db from '../db';
 import { User } from '../models/User';
 import { log } from 'console';
-
+//TODO: Uncomment any verbs that are needed.
 const router = express.Router();
 
 // middleware that is specific to this router
@@ -12,10 +12,10 @@ router.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 // GET all users
-router.get("/", async (req:Request, res:Response) => {
-  const users = await db.select().from("users");
-  res.json(users);
-});
+// router.get("/", async (req:Request, res:Response) => {
+//   const users = await db.select().from("users");
+//   res.json(users);
+// });
 
 // GET a single user by ID
 router.get("/:id", async (req:Request, res:Response) => {
@@ -31,7 +31,6 @@ router.get("/:id", async (req:Request, res:Response) => {
 
 // POST a new user
 router.post("/", async (req:Request, res:Response) => {
-
   log(req.body);
   try {
     const user = await User.query().insert(req.body);
@@ -56,13 +55,13 @@ router.put("/:id", async (req:Request, res:Response) => {
 });
 
 // DELETE a user by ID
-router.delete("/:id", async (req:Request, res:Response) => {
-  const numRowsDeleted = await User.query().deleteById(req.params.id);
-  if (numRowsDeleted === 1) {
-    res.sendStatus(204);
-  } else {
-    res.status(404).json({ message: "User not found" });
-  }
-});
+// router.delete("/:id", async (req:Request, res:Response) => {
+//   const numRowsDeleted = await User.query().deleteById(req.params.id);
+//   if (numRowsDeleted === 1) {
+//     res.sendStatus(204);
+//   } else {
+//     res.status(404).json({ message: "User not found" });
+//   }
+// });
 
 export  {router as users}

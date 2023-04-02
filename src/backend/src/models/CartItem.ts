@@ -5,7 +5,7 @@ import { Cart } from "./Cart";
 
 Model.knex(db);
 
-class CartItem extends Model {
+export class CartItem extends Model {
   static get tableName() {
     return "cart_items";
   }
