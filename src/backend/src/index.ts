@@ -6,7 +6,7 @@ import db from "./db";
 import { carts } from "./api/cart-api";
 import { cartItems } from "./api/cart_item-api";
 import { orderItems } from "./api/order_item-api";
-//TODO: FInish typing the classes in the models module
+
 dotenv.config();
 
 const app = express();
