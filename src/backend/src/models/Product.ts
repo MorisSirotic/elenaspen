@@ -3,7 +3,15 @@ import db from "../db";
 
 Model.knex(db);
 
-export class Product extends Model {
+interface ProductFields {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+}
+
+export class Product extends Model implements ProductFields {
   static get tableName() {
     return "products";
   }
@@ -21,4 +29,10 @@ export class Product extends Model {
       },
     };
   }
+
+  id!: number;
+  name!: string;
+  description!: string;
+  price!: number;
+  stock!: number;
 }

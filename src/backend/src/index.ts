@@ -5,6 +5,7 @@ import { users } from "./api/user-api";
 import db from "./db";
 import { carts } from "./api/cart-api";
 import { cartItems } from "./api/cart_item-api";
+import { orderItems } from "./api/order_item-api";
 
 dotenv.config();
 
@@ -30,12 +31,12 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-
+//TODO add user authentication to verify which items the user can access
 app.use("/users", users);
 app.use("/products", products);
 app.use("/carts", carts);
 app.use("/carts", cartItems);
-
+app.use("/orders", orderItems);
 
 app.get("/", (req, res) => {
   res.send("Express + TypeScript Server sssmssssd");

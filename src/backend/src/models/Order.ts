@@ -2,7 +2,14 @@ import { Model } from "objection";
 import { User } from "./User";
 import { OrderItem } from "./OrderItem";
 
-export class Order extends Model {
+interface OrderFields {
+  id: number;
+  user_id: number;
+  total_amount: number;
+  shipping_address: string;
+}
+
+export class Order extends Model implements OrderFields {
   static get tableName() {
     return "orders";
   }
@@ -27,4 +34,9 @@ export class Order extends Model {
       },
     };
   }
+
+  id!: number;
+  user_id!: number;
+  total_amount!: number;
+  shipping_address!: string;
 }
