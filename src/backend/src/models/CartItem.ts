@@ -5,7 +5,14 @@ import { Cart } from "./Cart";
 
 Model.knex(db);
 
-export class CartItem extends Model {
+interface CartItemFields {
+  id: number;
+  cart_id: number;
+  product_id: number;
+  quantity: number;
+}
+
+export class CartItem extends Model implements CartItemFields {
   static get tableName() {
     return "cart_items";
   }
@@ -30,4 +37,9 @@ export class CartItem extends Model {
       },
     };
   }
+
+  id!: number;
+  cart_id!: number;
+  product_id!: number;
+  quantity!: number;
 }

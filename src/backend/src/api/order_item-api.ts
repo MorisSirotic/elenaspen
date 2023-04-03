@@ -90,7 +90,9 @@ router.post("/", async (req: Request, res: Response) => {
 
         order.total_amount += quantity * product.price;
 
-        await Order.query(trx).findById(order.id).patch({ total_amount: order.total_amount });
+        await Order.query(trx)
+          .findById(order.id)
+          .patch({ total_amount: order.total_amount });
 
         log("-------------------------------------------------------");
         log(order);
@@ -125,7 +127,7 @@ router.post("/:order_id/order_items", async (req: Request, res: Response) => {
     }
     // then create the new order item
     const orderItem = await OrderItem.query().insert({
-      order_id,
+      order_id: order.id,
       product_id,
       quantity,
     });

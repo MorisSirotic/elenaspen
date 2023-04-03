@@ -1,8 +1,18 @@
 import { Model } from "objection";
 import { Product } from "./Product";
 import { Order } from "./Order";
+import db from "../db";
 
-export class OrderItem extends Model {
+Model.knex(db);
+
+interface OrderItemFields {
+  id: number;
+  order_id: number;
+  product_id: number;
+  quantity: number;
+}
+
+export class OrderItem extends Model implements OrderItemFields {
   static get tableName() {
     return "order_items";
   }
@@ -27,4 +37,9 @@ export class OrderItem extends Model {
       },
     };
   }
+
+ id!:number;
+  order_id!: number;
+  product_id!: number;
+  quantity!: number;
 }

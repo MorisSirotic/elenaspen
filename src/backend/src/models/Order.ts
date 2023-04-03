@@ -1,6 +1,9 @@
 import { Model } from "objection";
 import { User } from "./User";
 import { OrderItem } from "./OrderItem";
+import db from "../db";
+
+Model.knex(db);
 
 interface OrderFields {
   id: number;

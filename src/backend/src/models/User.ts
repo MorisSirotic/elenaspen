@@ -1,16 +1,16 @@
 import { Model } from "objection";
 import db from "../db";
+//TODO Implement password encryption later
+Model.knex(db);
 
-export type UserProps = {
+export type UserFields = {
   id: number;
   name: string;
   email: string;
   password: string;
 };
 
-Model.knex(db);
-
-export class User extends Model {
+export class User extends Model implements UserFields {
   static get tableName() {
     return "users";
   }
@@ -34,4 +34,9 @@ export class User extends Model {
       },
     };
   }
+
+  id!: number;
+  name!: string;
+  email!: string;
+  password!: string;
 }
