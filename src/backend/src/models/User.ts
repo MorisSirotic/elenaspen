@@ -1,4 +1,4 @@
-import { Model } from "objection";
+import { Model, snakeCaseMappers } from "objection";
 import db from "../db";
 //TODO Implement password encryption later
 Model.knex(db);
@@ -17,6 +17,10 @@ export class User extends Model implements UserFields {
 
   static get idColumn() {
     return "id";
+  }
+
+  static get columnNameMappers() {
+    return snakeCaseMappers();
   }
 
   static get jsonSchema() {

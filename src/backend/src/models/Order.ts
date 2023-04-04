@@ -1,4 +1,4 @@
-import { Model } from "objection";
+import { Model, snakeCaseMappers } from "objection";
 import { User } from "./User";
 import { OrderItem } from "./OrderItem";
 import db from "../db";
@@ -7,14 +7,18 @@ Model.knex(db);
 
 interface OrderFields {
   id: number;
-  user_id: number;
-  total_amount: number;
-  shipping_address: string;
+  userId: number;
+  totalAmount: number;
+  shippingAddress: string;
 }
 
 export class Order extends Model implements OrderFields {
   static get tableName() {
     return "orders";
+  }
+
+  static get columnNameMappers() {
+    return snakeCaseMappers();
   }
 
   static get relationMappings() {
@@ -39,7 +43,7 @@ export class Order extends Model implements OrderFields {
   }
 
   id!: number;
-  user_id!: number;
-  total_amount!: number;
-  shipping_address!: string;
+  userId!: number;
+  totalAmount!: number;
+  shippingAddress!: string;
 }

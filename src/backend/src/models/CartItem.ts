@@ -1,14 +1,14 @@
-import { Model } from "objection";
-import { Product } from "./Product";
+import { Model, snakeCaseMappers } from "objection";
 import db from "../db";
 import { Cart } from "./Cart";
+import { Product } from "./Product";
 
 Model.knex(db);
 
 interface CartItemFields {
   id: number;
-  cart_id: number;
-  product_id: number;
+  cartId: number;
+  productId: number;
   quantity: number;
 }
 
@@ -16,7 +16,9 @@ export class CartItem extends Model implements CartItemFields {
   static get tableName() {
     return "cart_items";
   }
-
+  static get columnNameMappers() {
+    return snakeCaseMappers();
+  }
   static get relationMappings() {
     return {
       cart: {
@@ -39,7 +41,7 @@ export class CartItem extends Model implements CartItemFields {
   }
 
   id!: number;
-  cart_id!: number;
-  product_id!: number;
+  cartId!: number;
+  productId!: number;
   quantity!: number;
 }

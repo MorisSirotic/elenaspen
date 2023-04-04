@@ -1,4 +1,4 @@
-import { Model } from "objection";
+import { Model, snakeCaseMappers } from "objection";
 import db from "../db";
 
 Model.knex(db);
@@ -14,6 +14,9 @@ interface ProductFields {
 export class Product extends Model implements ProductFields {
   static get tableName() {
     return "products";
+  }
+  static get columnNameMappers() {
+    return snakeCaseMappers();
   }
 
   static get jsonSchema() {

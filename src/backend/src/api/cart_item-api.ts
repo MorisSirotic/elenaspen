@@ -61,7 +61,7 @@ router.get('/:cartId/cart_items', async (req: Request, res: Response) => {
       const cartItem = await cart.$relatedQuery('cart_items').insert({
         product_id: productId,
         quantity,
-      }).returning('*').withGraphFetched('product');
+      }).withGraphFetched('product');
       res.json(cartItem);
     } catch (error) {
       res.status(500).json({ error: 'Unable to create cart item' });
@@ -70,14 +70,14 @@ router.get('/:cartId/cart_items', async (req: Request, res: Response) => {
 
   // UPDATE a cart item by ID
 router.put('/:cart_id/cart_items/:id', async (req: Request, res: Response) => {
-    const { cart_id, id } = req.params;
-    const { product_id, quantity } = req.body;
+    const { cartId, id } = req.params;
+    const { productId, quantity } = req.body;
     try {
-      const cartItem = await CartItem.query().findOne({ cart_id, id });
+      const cartItem = await CartItem.query().findOne({ cartId, id });
       if (!cartItem) {
         return res.status(404).json({ error: 'Cart item not found' });
       }
-      const updatedCartItem = await cartItem.$query().patchAndFetch({ product_id, quantity });
+      const updatedCartItem = await cartItem.$query().patchAndFetch({ productId, quantity });
       res.json(updatedCartItem);
     } catch (error) {
       res.status(500).json({ error: 'Unable to update cart item' });
@@ -86,9 +86,9 @@ router.put('/:cart_id/cart_items/:id', async (req: Request, res: Response) => {
   
   // DELETE a cart item by ID
   router.delete('/:cart_id/cart_items/:id', async (req: Request, res: Response) => {
-    const { cart_id, id } = req.params;
+    const { cartId, id } = req.params;
     try {
-      const numDeleted = await CartItem.query().findOne({ cart_id, id }).delete();
+      const numDeleted = await CartItem.query().findOne({ cartId, id }).delete();
       if (numDeleted === 0) {
         return res.status(404).json({ error: 'Cart item not found' });
       }

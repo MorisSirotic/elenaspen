@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import { Cart } from "../models/Cart";
+import { log } from "console";
 //TODO: Uncomment any verbs that are needed.
 const router = express.Router();
 
@@ -29,6 +30,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 
 // Create a new cart
 router.post("/", async (req: Request, res: Response) => {
+  log("klmkmmk")
   try {
     const cart = await Cart.query().insert(req.body);
     res.json(cart);
