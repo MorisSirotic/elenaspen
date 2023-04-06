@@ -24,17 +24,6 @@ export class Guest extends Model {
   static get jsonSchema() {
     return {
       type: "object",
-      required: [
-        "userId",
-        "firstName",
-        "lastName",
-        "email",
-        "phone",
-        "country",
-        "address1",
-        "city",
-        "zip",
-      ],
       properties: {
         id: { type: "integer" },
         userId: { type: "integer" },

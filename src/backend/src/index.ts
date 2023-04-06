@@ -5,22 +5,24 @@ import express, { Request, Response } from "express";
 import session from "express-session";
 import { carts } from "./api/cart-api";
 import { cartItems } from "./api/cart_item-api";
+import { guests } from "./api/guest-api";
 import { orderItems } from "./api/order_item-api";
 import { products } from "./api/product-api";
 import { users } from "./api/user-api";
+import { authenticate, isAuthenticated } from "./auth";
+import bcrypt from "bcrypt";
 import db from "./db";
-import { guests } from "./api/guest-api";
+import { log } from "console";
+import { User } from "./models/User";
+import { Cart } from "./models/Cart";
+import { CartItem } from "./models/CartItem";
 
-interface Customer {
+//guest
+export interface GuestFields {
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
-}
-//guest
-export interface GuestFields {
-  customer: Customer;
-
   country: string;
   address1: string;
   address2?: string;
@@ -30,7 +32,10 @@ export interface GuestFields {
 
 declare module "express-session" {
   interface SessionData {
+    userId: number;
     guest: GuestFields;
+    cart: Cart;
+    items: CartItem[];
   }
 }
 
@@ -75,72 +80,66 @@ app.use(
 );
 
 app.use(express.json());
-//TODO add user authentication to verify which items the user can access
 
-// app.use("/", (req: Request, res: Response) => {
-//   const guest: GuestFields = {
-//     customer: {
-//       firstName: "Testerman",
-//       lastName: "Test-a-lot",
-//       email: "test@test-mail.com",
-//       phone: "123456789",
-//     },
-//     address1: "Test Address",
-//     city: "Testcity",
-//     country: "Testerlandia",
-//     zip: "123",
-//     address2: "It also has an address1",
-//   };
+app.post("/encrypt", async (req, res) => {
+  const { password } = req.body;
 
-//   //req.session.guest = guest;
+  new Promise((resolve, reject) => {
+    resolve(bcrypt.hash(password, 10));
+  }).then((val) => res.send(val));
 
-//   // req.sessionStore.get(req.sessionID, (err, sess) => {
-//   //   if (sess && sess.guest) {
-//   //     sess.guest.country = "Diff Country122ssss";
-//   //     req.sessionStore.set(req.sessionID, sess);
-//   //     req.session.save();
-//   //   }
+  // res.json({ message: "Login successful" });
+});
 
-//   //res.end(`id: ${req.sessionID} \n ${req.session.guest?.country}`);
-//   // });
-// });
+app.post("/register", async (req, res) => {
+  const { name, email, password } = req.body;
+
+  // Check if user with email already exists
+  const existingUser = await User.query().findOne({ email });
+
+  if (existingUser) {
+    return res
+      .status(400)
+      .json({ message: "User with that email already exists" });
+  }
+
+  // Hash the password
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  try {
+    // Create the user
+    const user = await User.query().insert({
+      name,
+      email,
+      password: hashedPassword,
+    });
+
+    // Set the user session
+    // TODO: ADD EMAIL VERIFICATION SO PERHAPS THIS WILL BE REDUDANT IN THE FUTURE
+    req.session.userId = user.id;
+
+    res.status(201).json({ user });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+app.post("/login", authenticate, (req, res) => {
+  res.json({ message: "Login successful", user: res.locals.user });
+});
+
+app.get("/profile", isAuthenticated, (req, res) => {
+  const user = res.locals.user;
+  res.json(user);
+});
 
 app.use("/users", users);
 app.use("/products", products);
-app.use("/carts", carts);
+app.use("/cart", carts);
 app.use("/carts", cartItems);
 app.use("/orders", orderItems);
 app.use("/checkout/guest", guests);
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server sssmssssd");
-});
-
-app.get("/api", (req: Request, res: Response) => {
-  res.send({ message: "Hello, I work!" });
-});
-
-app.get("/api/users", async (req: Request, res: Response) => {
-  const ar = (await db.select("*").from("users")).at(0);
-
-  res.send(ar);
-});
-
 app.listen(PORT, () => {
   console.log(`[server]: Server is runninssssgs at http://localhost:${PORT}`);
 });
-
-// req.sessionStore.get(req.sessionID, (err, sess) => {
-//   if (sess && sess.guest) {
-//     log(sess.guest);
-//     log("her----------------------------------------e");
-//     sess.guest.country = "Diff Country122s";
-//     req.sessionStore.set(req.sessionID, sess);
-//   }
-//   //req.session.save();
-// });
-
-// const n = req.session.views || 0;
-// req.session.views = n + 1;
-// req.session.save();
-// res.end(`id: ${req.sessionID} \n ${req.session.guest?.country}`);

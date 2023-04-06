@@ -5,9 +5,9 @@ Model.knex(db);
 
 export type UserFields = {
   id: number;
-  name: string;
-  email: string;
-  password: string;
+  name?: string;
+  email?: string;
+  password?: string;
 };
 
 export class User extends Model implements UserFields {
@@ -26,7 +26,6 @@ export class User extends Model implements UserFields {
   static get jsonSchema() {
     return {
       type: "object",
-      required: ["name", "email", "password"],
       properties: {
         id: { type: "integer" },
         name: { type: "string" },
@@ -40,7 +39,7 @@ export class User extends Model implements UserFields {
   }
 
   id!: number;
-  name!: string;
-  email!: string;
-  password!: string;
+  name?: string;
+  email?: string;
+  password?: string;
 }

@@ -1,4 +1,4 @@
-import { Model } from "objection";
+import { Model, snakeCaseMappers } from "objection";
 import db from "../db";
 import { CartItem } from "./CartItem";
 import { User } from "./User";
@@ -6,14 +6,17 @@ import { User } from "./User";
 Model.knex(db);
 
 interface CartFields {
-  id: number;
+  id?: number;
   userId: number;
-  createdAt: Date;
+  createdAt?: Date;
 }
 
 export class Cart extends Model implements CartFields {
   static get tableName() {
     return "carts";
+  }
+  static get columnNameMappers() {
+    return snakeCaseMappers();
   }
 
   static get relationMappings() {
@@ -37,7 +40,7 @@ export class Cart extends Model implements CartFields {
     };
   }
 
-  id!: number;
+  id?: number;
   userId!: number;
-  createdAt!: Date;
+  createdAt?: Date;
 }

@@ -6,6 +6,32 @@ import { Product } from "../models/Product";
 
 const router = express.Router();
 
+// GET an order item by ID
+router.get("/", async (req: Request, res: Response) => {
+  const userId = req.session.userId; // get userId from session
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  try {
+    // find all orders for the user
+    const orders = await Order.query().where("user_id", userId);
+
+    // find order_items for each order
+    const ordersWithItems = await Promise.all(
+      orders.map(async (order) => {
+        const items = await OrderItem.query().where("order_id", order.id);
+        return { ...order, items };
+      })
+    );
+
+    res.json({ orders: ordersWithItems });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error retrieving orders" });
+  }
+});
+
 // GET all order items in an order
 router.get("/:id/order_items", async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -21,25 +47,27 @@ router.get("/:id/order_items", async (req: Request, res: Response) => {
 
 // GET an order item by ID
 router.get("/:orderId/order_items/:id", async (req: Request, res: Response) => {
-  const { orderId, id } = req.params;
+  const userId = req.session.userId; // get userId from session
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
   try {
-    // make sure the order exists first
-    const order = await Order.query().findById(orderId);
-    if (!order) {
-      return res.status(404).json({ error: "Order not found" });
-    }
-    // then fetch the order item by ID and make sure it belongs to the order
-    const orderItem = await OrderItem.query()
-      .findById(id)
-      .where({ orderId })
-      .withGraphFetched("product");
-    if (orderItem) {
-      res.json(orderItem);
-    } else {
-      res.status(404).json({ error: "Order item not found" });
-    }
+    // find all orders for the user
+    const orders = await Order.query().where("user_id", userId);
+
+    // find order_items for each order
+    const ordersWithItems = await Promise.all(
+      orders.map(async (order) => {
+        const items = await OrderItem.query().where("order_id", order.id);
+        return { ...order, items };
+      })
+    );
+
+    res.json({ orders: ordersWithItems });
   } catch (error) {
-    res.status(500).json({ error: "Unable to retrieve order item" });
+    console.error(error);
+    res.status(500).json({ message: "Error retrieving orders" });
   }
 });
 
@@ -49,7 +77,7 @@ router.post("/", async (req: Request, res: Response) => {
   );
   const { orderItems } = req.body;
   //const { id } = req.session;
-  
+
   //TODO Change this later to the code above. Install express-session
   const userId = 1;
 
@@ -63,7 +91,7 @@ router.post("/", async (req: Request, res: Response) => {
       shippingAddress: "Testerska 12",
     });
     //TODO: COME HERE
-   const newOrderItems = await Promise.all(
+    const newOrderItems = await Promise.all(
       orderItems.map(async (item: OrderItem) => {
         const { productId, quantity } = item;
         const product = await Product.query(trx).findById(productId);
@@ -105,7 +133,7 @@ router.post("/", async (req: Request, res: Response) => {
     );
 
     await trx.commit();
-    res.json({ order, newOrderItems});
+    res.json({ order, newOrderItems });
   } catch (error) {
     await trx.rollback();
     console.log(error);
