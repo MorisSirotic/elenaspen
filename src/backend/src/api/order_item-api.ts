@@ -120,9 +120,7 @@ router.post("/", async (req: Request, res: Response) => {
           .findById(order.id)
           .patch({ totalAmount: order.totalAmount });
 
-        log("-------------------------------------------------------");
-        log(order);
-
+    
         return OrderItem.query(trx).insert({
           orderId: order.id,
           productId,

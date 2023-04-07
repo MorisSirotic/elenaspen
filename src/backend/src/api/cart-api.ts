@@ -1,11 +1,11 @@
 import { log } from "console";
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import { Cart } from "../models/Cart";
 import { CartItem } from "../models/CartItem";
 import { Guest } from "../models/Guest";
-import { User } from "../models/User";
 import { Order } from "../models/Order";
 import { OrderItem } from "../models/OrderItem";
+import { User } from "../models/User";
 import { Mailer } from "../util/mailer";
 //TODO: Uncomment any verbs that are needed.
 const router = express.Router();
@@ -86,8 +86,6 @@ router.post(
       }
     } else {
       // Request is from a guest
-
-      log(sessionCartItems);
       if (sessionGuest && sessionCart) {
         // Guest is still in session, update its cart
         cart = sessionCart;
@@ -141,23 +139,13 @@ router.post(
 router.post("/checkout", async (req, res) => {
   // 1. Get the user/guest from the session
   const { userId } = req.session;
-  if(!userId){
-    res.status(500).send({error:"Invalid Request. ID:I-95"})
+  if (!userId) {
+    res.status(500).send({ error: "Invalid Request. ID:I-95" });
     return;
   }
 
   const user = await User.query().findOne({ id: userId });
- // const guest = await Guest.query().findOne({ user_id: userId });
-
-  //Is the checkout from a
-  const account = user; //? user : guest;
-
-  // let accountType;
-  // if (user) {
-  //   accountType = "User";
-  // } else if (guest) {
-  //   accountType = "Guest";
-  // }
+  const account = user;
 
   if (!account) {
     res.status(404).send({ error: "User is missing" });
@@ -175,15 +163,12 @@ router.post("/checkout", async (req, res) => {
     .where({ cart_id: sessionCart!.id })
     .withGraphFetched("product");
 
-  log(cartItems);
-  //res.send(cartItems);
-
   // 2. Calculate the total price
   const totalPrice = cartItems.reduce(
     (total, item: any) => total + item.product.price * item.quantity,
     0
   );
-//TODO ADD SHIPPING ADDRESS
+  //TODO ADD SHIPPING ADDRESS
   // 3. Create the order
   const order = await Order.query().insert({
     userId: account.id,
@@ -203,10 +188,19 @@ router.post("/checkout", async (req, res) => {
     await OrderItem.query().insert(orderItem);
   }
 
-//Send Email
-const {MAIL_RECEPIENT_DEV} = process.env;
+  //Send Email
+  const { MAIL_RECEPIENT_DEV } = process.env;
 
-Mailer.sendMail({content: "Content 33", recipient:String(MAIL_RECEPIENT_DEV), subject: "Test Subject 33"});
+  for (const cartItem of cartItems) {
+    const inner: any = cartItem;
+    log(inner.product);
+  }
+
+  Mailer.sendMail({
+    content: Mailer.generateHTML(`Your order has been received.`, cartItems),
+    recipient: String(MAIL_RECEPIENT_DEV),
+    subject: `Order #${order.id}`,
+  });
 
   // 5. Delete the cart
   // await CartItem.query()
@@ -218,7 +212,7 @@ Mailer.sendMail({content: "Content 33", recipient:String(MAIL_RECEPIENT_DEV), su
   // await Cart.query().deleteById(sessionCart.id);
 
   // 6. Send response
-  res.status(200).json({ order: "Success!"});
+  res.status(200).json({ order: "Success!" });
 });
 
 export { router as carts };

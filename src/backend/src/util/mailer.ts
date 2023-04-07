@@ -1,11 +1,31 @@
 import { log } from "console";
 import nodemailer from "nodemailer";
+import { CartItem } from "../models/CartItem";
+import { Product } from "../models/Product";
 
 const { MAIL_HOST, MAIL_PORT, MAIL_TLS, MAIL_USER, MAIL_PASSWORD } =
   process.env;
 
-
 export class Mailer {
+  // Generate HTML content with cartItems data
+  static generateHTML = (header: any, cartItems: any[]) => {
+    const total = 0;
+    let html = `<h1>${header}</h1>`;
+    html += "<ul>";
+    for (const cartItem of cartItems) {
+      const product: Product = cartItem.product;
+      html += `<li>
+    Name: <b> ${product.name} </b> <br>
+   Price: <b>  ${product.price} </b> <br>
+   Ordered:  <b>  ${cartItem.quantity}</b> <br>
+   <br>
+    </li>`; 
+    }
+    html+="<br> <br> You will be informed when your order ships out. Thank you for shopping with us!"
+    html += "</ul>";
+    return html;
+  };
+
   static sendMail = (prop: {
     recipient: string;
     subject: string;
@@ -27,7 +47,7 @@ export class Mailer {
       from: String(MAIL_USER), // Replace with your email address
       to: recipient, // Replace with recipient's email address
       subject, // Replace with email subject
-      text: content, // Replace with email body
+      html: content,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {

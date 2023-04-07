@@ -1,7 +1,8 @@
+import bcrypt from "bcrypt";
 import KnexSessionStore from "connect-session-knex";
 import { randomUUID } from "crypto";
 import dotenv from "dotenv";
-import express, { Request, Response } from "express";
+import express from "express";
 import session from "express-session";
 import { carts } from "./api/cart-api";
 import { cartItems } from "./api/cart_item-api";
@@ -9,12 +10,10 @@ import { orderItems } from "./api/order_item-api";
 import { products } from "./api/product-api";
 import { users } from "./api/user-api";
 import { authenticate, isAuthenticated } from "./auth";
-import bcrypt from "bcrypt";
 import db from "./db";
-import { log } from "console";
-import { User } from "./models/User";
 import { Cart } from "./models/Cart";
 import { CartItem } from "./models/CartItem";
+import { User } from "./models/User";
 
 //guest
 export interface GuestFields {
@@ -137,7 +136,6 @@ app.use("/products", products);
 app.use("/cart", carts);
 app.use("/carts", cartItems);
 app.use("/orders", orderItems);
-
 
 app.listen(PORT, () => {
   console.log(`[server]: Server is runninssssgs at http://localhost:${PORT}`);
