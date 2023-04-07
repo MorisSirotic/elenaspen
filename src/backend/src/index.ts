@@ -14,6 +14,7 @@ import db from "./db";
 import { Cart } from "./models/Cart";
 import { CartItem } from "./models/CartItem";
 import { User } from "./models/User";
+import { stripe } from "./api/stripe-api";
 
 //guest
 export interface GuestFields {
@@ -136,6 +137,7 @@ app.use("/products", products);
 app.use("/cart", carts);
 app.use("/carts", cartItems);
 app.use("/orders", orderItems);
+app.use("/stripe", stripe);
 
 app.listen(PORT, () => {
   console.log(`[server]: Server is runninssssgs at http://localhost:${PORT}`);
