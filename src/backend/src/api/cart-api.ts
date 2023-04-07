@@ -182,7 +182,7 @@ router.post("/checkout", async (req, res) => {
     (total, item: any) => total + item.product.price * item.quantity,
     0
   );
-
+//TODO ADD SHIPPING ADDRESS
   // 3. Create the order
   const order = await Order.query().insert({
     userId: account.id,
