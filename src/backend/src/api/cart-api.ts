@@ -6,6 +6,7 @@ import { Guest } from "../models/Guest";
 import { User } from "../models/User";
 import { Order } from "../models/Order";
 import { OrderItem } from "../models/OrderItem";
+import { Mailer } from "../util/mailer";
 //TODO: Uncomment any verbs that are needed.
 const router = express.Router();
 
@@ -201,6 +202,11 @@ router.post("/checkout", async (req, res) => {
   for (const orderItem of orderItems) {
     await OrderItem.query().insert(orderItem);
   }
+
+//Send Email
+const {MAIL_RECEPIENT_DEV} = process.env;
+
+Mailer.sendMail({content: "Content 33", recipient:String(MAIL_RECEPIENT_DEV), subject: "Test Subject 33"});
 
   // 5. Delete the cart
   // await CartItem.query()

@@ -27,6 +27,7 @@ router.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
+//TODO Implement save User
 // POST a new user
 router.post("/", async (req: Request, res: Response) => {
   log(req.body);
@@ -38,6 +39,7 @@ router.post("/", async (req: Request, res: Response) => {
   }
 });
 
+//TODO Implement save User
 // PUT/UPDATE a user by ID
 router.put("/:id", async (req: Request, res: Response) => {
   try {
