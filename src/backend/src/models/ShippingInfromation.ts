@@ -1,15 +1,14 @@
 import { Model, snakeCaseMappers } from "objection";
 import db from "../db";
-import Ajv from "ajv";
 
 Model.knex(db);
 
-export type UserFields = {
+export type ShippingInformationFields = {
   id: number;
-  name?: string | null;
-  email?: string | null;
-  password?: string | null;
+  user_id: number;
+  first_name?: string | null;
   last_name?: string | null;
+  email?: string | null;
   phone?: string | null;
   country?: string | null;
   address1?: string | null;
@@ -20,9 +19,12 @@ export type UserFields = {
   updated_at?: Date;
 };
 
-export class User extends Model implements UserFields {
+export class ShippingInformation
+  extends Model
+  implements ShippingInformationFields
+{
   static get tableName() {
-    return "users";
+    return "shipping_information";
   }
 
   static get idColumn() {
@@ -34,36 +36,35 @@ export class User extends Model implements UserFields {
   }
 
   static get jsonSchema() {
-  
     return {
       type: "object",
       properties: {
         id: { type: "integer" },
-        name: { type: ["string", "null"] },
+        user_id: { type: "integer" },
+        first_name: { type: ["string", "null"] },
+        last_name: { type: ["string", "null"] },
         email: {
-          type: "string",
+          type: ["string", "null"],
           pattern: "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}$",
           uniqueItems: true,
         },
-        password: { type: ["string", "null"] },
-        last_name: { type: ["string", "null"] },
         phone: { type: ["string", "null"] },
         country: { type: ["string", "null"] },
         address1: { type: ["string", "null"] },
         address2: { type: ["string", "null"] },
         city: { type: ["string", "null"] },
         zip: { type: ["string", "null"] },
-        created_at: { type: "string"},
-        updated_at: { type: "string"},
+        created_at: { type: "string" },
+        updated_at: { type: "string" },
       },
     };
   }
 
   id!: number;
-  name?: string | null;
-  email?: string | null;
-  password?: string | null;
+  user_id!: number;
+  first_name?: string | null;
   last_name?: string | null;
+  email?: string | null;
   phone?: string | null;
   country?: string | null;
   address1?: string | null;

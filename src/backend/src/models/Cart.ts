@@ -6,7 +6,7 @@ import { User } from "./User";
 Model.knex(db);
 
 interface CartFields {
-  id?: number;
+  id: number;
   userId: number;
   createdAt?: Date;
 }
@@ -40,7 +40,7 @@ export class Cart extends Model implements CartFields {
     };
   }
 
-  id?: number;
+  id!: number;
   userId!: number;
   createdAt?: Date;
 }

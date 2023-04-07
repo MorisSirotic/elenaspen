@@ -6,8 +6,8 @@ import db from "../db";
 Model.knex(db);
 
 interface OrderFields {
-  id: number;
-  userId: number;
+  id?: number;
+  userId: number | null;
   totalAmount: number;
   shippingAddress: string;
 }
@@ -42,7 +42,7 @@ export class Order extends Model implements OrderFields {
     };
   }
 
-  id!: number;
+  id?: number;
   userId!: number;
   totalAmount!: number;
   shippingAddress!: string;
