@@ -5,7 +5,6 @@ import express, { Request, Response } from "express";
 import session from "express-session";
 import { carts } from "./api/cart-api";
 import { cartItems } from "./api/cart_item-api";
-import { guests } from "./api/guest-api";
 import { orderItems } from "./api/order_item-api";
 import { products } from "./api/product-api";
 import { users } from "./api/user-api";
@@ -138,7 +137,7 @@ app.use("/products", products);
 app.use("/cart", carts);
 app.use("/carts", cartItems);
 app.use("/orders", orderItems);
-app.use("/checkout/guest", guests);
+
 
 app.listen(PORT, () => {
   console.log(`[server]: Server is runninssssgs at http://localhost:${PORT}`);
