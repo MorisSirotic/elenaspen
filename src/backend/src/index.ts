@@ -8,13 +8,13 @@ import { carts } from "./api/cart-api";
 import { cartItems } from "./api/cart_item-api";
 import { orderItems } from "./api/order_item-api";
 import { products } from "./api/product-api";
+import { stripe } from "./api/stripe-api";
 import { users } from "./api/user-api";
 import { authenticate, isAuthenticated } from "./auth";
 import db from "./db";
 import { Cart } from "./models/Cart";
 import { CartItem } from "./models/CartItem";
 import { User } from "./models/User";
-import { stripe } from "./api/stripe-api";
 
 //guest
 export interface GuestFields {
@@ -46,11 +46,13 @@ const { PORT } = process.env;
 
 const StoreFactory = KnexSessionStore(session);
 
-const store = new StoreFactory({ knex: db });
+export const store = new StoreFactory({ knex: db });
+
 
 app.use((req, res, next) => {
   const allowedOrigins = ["http://localhost:5173", "http://localhost:8000"]; // Update with your frontend's origin
   const origin = req.headers.origin;
+
   if (allowedOrigins.includes(String(origin))) {
     res.setHeader("Access-Control-Allow-Origin", String(origin));
   }
@@ -60,7 +62,7 @@ app.use((req, res, next) => {
   );
   res.header(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
   next();
 });

@@ -1,5 +1,6 @@
 import { log } from "console";
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
+import { store } from "..";
 import { Cart } from "../models/Cart";
 import { CartItem } from "../models/CartItem";
 import { Guest } from "../models/Guest";
@@ -10,16 +11,44 @@ import { Mailer } from "../util/mailer";
 //TODO: Uncomment any verbs that are needed.
 const router = express.Router();
 
+// middleware that is specific to this router
+router.use((req: Request, res: Response, next: NextFunction) => {
+  console.log("Time: ", Date.now());
+  next();
+});
+
 // Get a specific cart
 router.get("/", async (req: Request, res: Response) => {
-  const userId = req.session.userId;
+  const session = req.headers.authorization;
+  log(session);
+
+  if (!session) {
+    res.status(204).send();
+    return;
+  }
+
+  //const sessionId = req.params.id; // Get session ID from request params
+
+  // Retrieve session data from KnexSessionStore
+  const sessionData = await new Promise<any>((resolve, reject) => {
+    store.get(session, (err: any, session: any) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(session);
+      }
+    });
+  });
+
+  const userId = sessionData.userId;
 
   if (!userId) {
-    return res.status(204).send();
+    res.status(401).json({ error: "Session expired" });
+    return;
   }
 
   try {
-    const cart = await Cart.query()
+    const cart: any = await Cart.query()
       .where("user_id", userId)
       .withGraphFetched("cart_items.product")
       .first();
@@ -132,7 +161,9 @@ router.post(
       .where({ cart_id: cart!.id })
       .withGraphFetched("product");
 
-    res.status(201).json({ cart: cart, items: cartItems });
+    res
+      .status(201)
+      .json({ cart: cart, items: cartItems, sessId: req.session.id });
   }
 );
 
