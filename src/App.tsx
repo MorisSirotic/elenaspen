@@ -24,10 +24,6 @@ const items = [
 export const App = () => {
   const cartService = new CartService();
 
-  const [user, setuser] = useState<Props>();
-
-  const [cart, setCart] = useState();
-
   // Store userId in local storage when it changes
   useEffect(() => {}, []);
 
@@ -58,8 +54,6 @@ export const App = () => {
 
       <Footer />
 
-      {user?.name}
-
       <div>
         <button className="w-6 h-6 m-2 bg-slate-100" onClick={handleCartGet}>
           Get Cart
@@ -68,8 +62,6 @@ export const App = () => {
           Post Cart
         </button>
       </div>
-
-      <MyComponent />
     </div>
   );
 };
