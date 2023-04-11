@@ -2,6 +2,7 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 import woman from "../assets/woman-discount.png";
 import { ListProduct } from "./ListProduct";
+import { ProductItem } from "./router/Items";
 
 export const Top = () => {
   return (
@@ -80,6 +81,7 @@ export const Top = () => {
         </div>
       </div>
       <ListProduct />
+      <ProductItem id={"1"} name={"TR"} description={"SSSS"} price={22}/>
       <div className="flex items-center flex-wrap sm:flex-nowrap">
         <CardBottom />
         <CardBottomMailForm />

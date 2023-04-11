@@ -20,14 +20,17 @@ export class CartService {
 
   async getCart(): Promise<any> {
     const sessionId = getSessionId();
-    // if (sessionId) {
-    //   axios.defaults.headers.common["Authorization"] = sessionId;
-    // }
-
     try {
-   
-    const response: AxiosResponse = await axios.get(this.baseUrl, {headers: {Authorization: sessionId}});
-      return response.data;
+      const response: AxiosResponse = await axios.get(this.baseUrl, {
+        headers: { Authorization: sessionId },
+      });
+      console.log(response.status);
+      
+      if (response.status === 204) {
+        return [];
+      } else {
+        return response.data.cart_items;
+      }
     } catch (error) {
       console.error("Error fetching cart:", error);
       throw error;

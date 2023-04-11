@@ -1,5 +1,17 @@
+import { Outlet } from "react-router-dom";
+import { Footer } from "../Footer";
+import { Navbar } from "../Navbar";
+
 export const Root = () => {
-    return <div>
-        Root Page
+  return (
+    <div className="flex flex-col w-full h-full min-h-screen bg-neutral-100">
+      <Navbar />
+
+      <div className="m-auto">
+        <Outlet />
+      </div>
+
+      <Footer />
     </div>
-}
+  );
+};

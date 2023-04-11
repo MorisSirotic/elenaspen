@@ -1,14 +1,5 @@
-import { useEffect, useState } from "react";
-import { Footer } from "./components/Footer";
-import { Navbar } from "./components/Navbar";
-import { Top } from "./components/Top";
-import { MyComponent } from "./components/stateful/MyComponent";
+import { useEffect } from "react";
 import { CartService, setSessionId } from "./services/Cart.service";
-
-type Props = {
-  id: string;
-  name: string;
-};
 
 const items = [
   {
@@ -47,21 +38,8 @@ export const App = () => {
   };
 
   return (
-    <div className="flex flex-col w-full h-full min-h-screen bg-neutral-100">
-      <Navbar />
-
-      <Top />
-
-      <Footer />
-
-      <div>
-        <button className="w-6 h-6 m-2 bg-slate-100" onClick={handleCartGet}>
-          Get Cart
-        </button>
-        <button className="w-6 h-6 m-2 bg-slate-500" onClick={handleCartPost}>
-          Post Cart
-        </button>
-      </div>
-    </div>
+ <>
+<button onClick={handleCartPost}> POST</button>
+ </>
   );
 };
