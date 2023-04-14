@@ -36,7 +36,6 @@ export class CartService {
       throw error;
     }
   }
-
   async postCart(items: any[]): Promise<any> {
     try {
       const response: AxiosResponse = await axios.post(this.baseUrl, { items });
@@ -45,5 +44,20 @@ export class CartService {
       console.error("Error updating cart:", error);
       throw error;
     }
+  }
+}
+export const  addItemsToCart  = async(items: any[]): Promise<any> =>{
+  const sessionId = getSessionId();
+  try {
+ 
+    const response: AxiosResponse = await axios.post("http://localhost:8000/cart", {items},{
+      headers: { Authorization: sessionId },
+    });
+
+ 
+    return response.data;
+  } catch (error) {
+    console.error("Error updating cart:", error);
+    throw error;
   }
 }

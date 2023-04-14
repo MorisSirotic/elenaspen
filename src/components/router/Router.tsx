@@ -6,17 +6,21 @@ import { Checkout } from "./Checkout";
 import { Items } from "./Items";
 import { Order } from "./Order";
 import { Root } from "./Root";
+import { ProductService } from "../../services/Product.service";
 const cartService = new CartService();
+const productService = new ProductService();
 
 const getCartData = async () => {
- return await cartService.getCart().then((res) => {
-  // console.log(res);
+  return await cartService.getCart().then((res) => {
     return res;
   });
-  
+};
 
- 
-}
+const getProductData = async () => {
+  return await productService.getProducts().then((res) => {
+    return res;
+  });
+};
 
 export const router = createBrowserRouter([
   {
@@ -26,13 +30,16 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Top />,
+        loader: async () => {
+          return getProductData();
+        }
       },
       {
         path: "/cart",
         element: <Cart />,
-        loader: async() => {
-         return getCartData();
-        }, 
+        loader: async () => {
+          return getCartData();
+        },
       },
       {
         path: "/order",
@@ -45,9 +52,9 @@ export const router = createBrowserRouter([
       {
         path: "/checkout",
         element: <Checkout />,
-        loader: async() => {
+        loader: async () => {
           return getCartData();
-         },
+        },
       },
     ],
   },

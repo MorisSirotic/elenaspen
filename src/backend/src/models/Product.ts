@@ -4,7 +4,7 @@ import db from "../db";
 Model.knex(db);
 
 interface ProductFields {
-  id: number;
+  id: string;
   name: string;
   description: string;
   price: number;
@@ -32,7 +32,7 @@ export class Product extends Model implements ProductFields {
     };
   }
 
-  id!: number;
+  id!: string;
   name!: string;
   description!: string;
   price!: number;

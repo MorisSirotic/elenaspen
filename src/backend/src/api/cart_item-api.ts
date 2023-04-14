@@ -42,7 +42,7 @@ router.get('/:cartId/cart_items', async (req: Request, res: Response) => {
       res.status(500).json({ error: 'Unable to retrieve cart item' });
     }
   });
-  
+ 
   // POST a new cart item to a cart
   router.post('/:cartId/cart_items', async (req: Request, res: Response) => {
     const { cartId } = req.params;

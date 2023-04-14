@@ -1,26 +1,46 @@
-export const CardProduct = () => {
+import { addItemsToCart, getSessionId, setSessionId } from "../services/Cart.service";
+
+export const CardProduct = (props: {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+}) => {
   return (
-    <div className="flex flex-col sm:flex-row m-2 items-center bg-white ">
+    <div className="flex flex-col sm:flex-row m-2 items-center bg-slate-300 ">
       <img
         className="w-full h-full md:w-3/6 max-w-sm  object-cover"
         src="https://via.placeholder.com/400/300"
       />
 
-      <div className="flex flex-col w-full self-start p-8 bg-slate-300 max-w-sm ">
-        <span className="text-2xl pb-2 self-center">Name #1</span>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat amet
-        corrupti quod quam provident, placeat nihil nostrum assumenda
-        praesentium sunt adipisci fuga quasi quis eveniet quidem officiis modi
-        quae dignissimos debitis ab voluptates illum similique. Impedit, quod
-        error perspiciatis alias rerum inventore qui consequuntur hic
-        recusandae, aliquam sit voluptatem corporis.
+      <div className="flex h-full flex-col w-full self-start p-8 bg-slate-300 max-w-sm ">
+        <span className="text-2xl font-semibold pb-2 self-center">
+          {props.name}
+        </span>
+        <span className="pb-2 self-center"> {props.description}</span>
         <div className="flex justify-around mt-auto p-2">
           <div>
             <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-2xl font-semibold text-gray-700 mr-2">
-              ${22}
+              ${props.price}
             </span>
           </div>
-          <button className="text-2xl w-full">Add</button>
+          <button
+            onClick={() => {
+              addItemsToCart([{ productId: props.id, quantity: 1 }]).then(res => {
+                console.log("ressss");
+                
+                console.log(res);
+                
+                if(!getSessionId()){
+                  setSessionId(res.sessId);
+                }
+              });
+             
+            }}
+            className="text-2xl w-full"
+          >
+            Add
+          </button>
         </div>
       </div>
     </div>

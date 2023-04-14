@@ -64,108 +64,89 @@ router.get("/", async (req: Request, res: Response) => {
   }
 });
 
-router.post(
-  "/",
-  async (req: Request<{ guest: Guest; items: CartItem[] }>, res: Response) => {
-    const { items } = req.body;
+router.post("/", async (req: Request, res: Response) => {
+  const { items } = req.body;
+  log("ALOS");
+  //prevents incorrect type from being passed
+  log(items);
+  if (!items && !Array.isArray(items)) {
+    res.status(404).send({ error: "Bad items array format" });
+    return;
+  }
 
-    //prevents incorrect type from being passed
-    if (!items && !Array.isArray(items)) {
-      res.status(404).send({ error: "Bad items array format" });
-      return;
-    }
+  const session = req.headers.authorization || "";
 
-    const userId = req.session.userId;
-
-    const sessionCart = req.session.cart;
-    const sessionGuest = req.session.guest;
-    const sessionCartItems = items;
-
-    let cart: any;
-
-    if (userId) {
-      // Request is from the user, not the guest
-      const user = await User.query().findById(userId);
-      if (user) {
-        // If user is logged in, create a cart for the user
-        cart = await Cart.query().findOne({ user_id: user.id });
-        if (!cart) {
-          cart = await Cart.query().insert({ userId: user.id });
-        }
-
-        // Add items to the user's cart
-        for (const item of items) {
-          const existingItem = await CartItem.query().findOne({
-            cart_id: cart.id,
-            product_id: item.productId,
-          });
-          if (existingItem) {
-            existingItem.quantity += item.quantity;
-            await existingItem
-              .$query()
-              .update({ quantity: existingItem.quantity });
-          } else {
-            await CartItem.query().insert({
-              cartId: cart.id,
-              productId: item.productId,
-              quantity: item.quantity,
-            });
-          }
-        }
-      }
-    } else {
-      // Request is from a guest
-      if (sessionGuest && sessionCart) {
-        // Guest is still in session, update its cart
-        cart = sessionCart;
-        for (const item of items) {
-          const existingItem = sessionCartItems.find(
-            (sessionItem: CartItem) => sessionItem.productId === item.productId
-          );
-          if (existingItem) {
-            existingItem.quantity += item.quantity;
-            await existingItem
-              .$query()
-              .update({ quantity: existingItem.quantity });
-          } else {
-            await CartItem.query().insert({
-              cartId: item.cartId,
-              productId: item.productId,
-              quantity: item.quantity,
-            });
-          }
-        }
+  const sessionData = await new Promise<any>((resolve, reject) => {
+    store.get(session, (err: any, session: any) => {
+      if (err) {
+        reject(err);
       } else {
-        // Guest is either new or its session has expired
-        const user = await User.query().insert({});
-        const newGuest = await Guest.query().insert({ userId: user.id });
-        cart = await Cart.query().insert({ userId: user.id });
+        resolve(session);
+      }
+    });
+  });
 
-        // Add items to the guest's cart
-        for (const item of items) {
+  let cart: any;
+
+  if (sessionData) {
+    // Request is from the user, not the guest
+    const user = await User.query().findById(sessionData.userId);
+    if (user) {
+      // If user is logged in, create a cart for the user
+      cart = await Cart.query().findOne({ user_id: user.id });
+      if (!cart) {
+        cart = await Cart.query().insert({ userId: user.id });
+      }
+
+      // Add items to the user's cart
+      for (const item of items) {
+        const existingItem = await CartItem.query().findOne({
+          cart_id: cart.id,
+          product_id: item.productId,
+        });
+        if (existingItem) {
+          existingItem.quantity += item.quantity;
+          await existingItem
+            .$query()
+            .update({ quantity: existingItem.quantity });
+        } else {
           await CartItem.query().insert({
             cartId: cart.id,
             productId: item.productId,
             quantity: item.quantity,
           });
         }
-
-        req.session.cart = cart;
-        req.session.guest = newGuest;
-        req.session.userId = user.id;
-        req.session.save();
       }
     }
+  } else {
+    // Guest is either new or its session has expired
+    const user = await User.query().insert({});
+    const newGuest = await Guest.query().insert({ userId: user.id });
+    cart = await Cart.query().insert({ userId: user.id });
 
-    const cartItems = await CartItem.query()
-      .where({ cart_id: cart!.id })
-      .withGraphFetched("product");
+    // Add items to the guest's cart
+    for (const item of items) {
+      await CartItem.query().insert({
+        cartId: cart.id,
+        productId: item.productId,
+        quantity: item.quantity,
+      });
+    }
 
-    res
-      .status(201)
-      .json({ cart: cart, items: cartItems, sessId: req.session.id });
+    req.session.cart = cart;
+    req.session.guest = newGuest;
+    req.session.userId = user.id;
+    req.session.save();
   }
-);
+
+  const cartItems = await CartItem.query()
+    .where({ cart_id: cart!.id })
+    .withGraphFetched("product");
+
+  res
+    .status(201)
+    .json({ cart: cart, items: cartItems, sessId: req.session.id });
+});
 
 router.post("/checkout", async (req, res) => {
   // 1. Get the user/guest from the session

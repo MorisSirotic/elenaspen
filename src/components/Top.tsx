@@ -3,6 +3,8 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import woman from "../assets/woman-discount.png";
 import { ListProduct } from "./ListProduct";
 import { ProductItem } from "./router/Items";
+import { useLoaderData } from "react-router-dom";
+import { Product } from "../backend/src/models/Product";
 
 export const Top = () => {
   return (
@@ -39,18 +41,18 @@ export const Top = () => {
             </div>
           </div>
         </div>
-       
+
         <div className="flex self-center w-80 h-80 sm:w-96 sm:h-96 bg-yellow-400 rounded-full ">
           <div className="m-auto">ssssssssssssssssss</div>
         </div>
       </div>
-  
+
       <div className="flex w-full">
         <CardTop title="Skincare" message="Organic ingredients" />
         <CardTop title="Makeup" message="Perfect and natural makeup" />
         <CardTop title=" What's New" message="Shop Our New Arrivals" />
       </div>
-      <ListProduct/>
+      <ListProduct />
       <div className="flex flex-col  sm:w-full md:flex-row p-2 justify-center items-center">
         <div className="w-full max-w-5xl h-96 min-w-[300px] p-2">
           <CardMid
@@ -81,12 +83,11 @@ export const Top = () => {
         </div>
       </div>
       <ListProduct />
-      <ProductItem id={"1"} name={"TR"} description={"SSSS"} price={22}/>
+
       <div className="flex items-center flex-wrap sm:flex-nowrap">
         <CardBottom />
         <CardBottomMailForm />
       </div>
-     
     </div>
   );
 };
@@ -141,23 +142,6 @@ const CardBottom = () => {
   );
 };
 
-// const CardBottomMailForm = () => {
-//   return (
-//     <div className="container flex h-fit flex-col bg-red-200 m-2 rounded-3xl p-8 bg-[url('https://via.placeholder.com/1920')]">
-//       <h2 className="text-2xl p-2">Subscribe Now and SAVE</h2>
-//       <div className="w-full flex flex-wrap sm:flex-row justify-center  rounded-full ">
-//         <input
-//           className="w-full max-w-[230px] h-12 bg-transparent focus:outline-none bg-white rounded-full px-2"
-//           placeholder="Enter your email"
-//         />
-//         <button className="w-28 text-lg bg-orange-400 rounded-full h-12 m-auto">
-//           Subscribe
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
-
 const CardBottomMailForm = () => {
   return (
     <div className="container flex h-52 flex-col bg-red-600 m-2 rounded-3xl p-8 bg-[url('https://via.placeholder.com/1920')] items-center">
@@ -175,34 +159,3 @@ const CardBottomMailForm = () => {
     </div>
   );
 };
-
-// const CardBottomMailForm = () => {
-//   return (
-//     <div className="container flex h-fit flex-col bg-red-200 m-2 rounded-3xl p-8 bg-[url('https://via.placeholder.com/1920')] items-center">
-//       <h2 className="text-2xl">Subscribe Now and SAVE</h2>
-
-//       <div className="flex max-w-md sm:flex-row flex-col  h-fit p-2 bg-orange-200 rounded-full justify-around  mt-2">
-//         <input
-//           className="w-full self-center h-8 bg-transparent focus:outline-none rounded-full px-2 bg-white "
-//           placeholder="Your Email"
-//         />
-//         <button className="bg-orange-400 rounded-full p-2 ">Subscribe</button>
-//       </div>
-//     </div>
-//   );
-// };
-// const CardBottomMailForm = () => {
-//   return (
-//     <div className="container flex h-fit flex-col bg-red-200 m-2 rounded-3xl p-8 bg-[url('https://via.placeholder.com/1920')]">
-//       <h2 className="text-2xl">Subscribe Now and SAVE</h2>
-
-//       <div className="flex h-14 p-2 bg-white rounded-full justify-around mt-2">
-//         <input
-//           className="w-full bg-transparent focus:outline-none rounded-full px-2"
-//           placeholder="Your Email"
-//         />
-//         <button className="bg-orange-400 rounded-full p-2">Subscribe</button>
-//       </div>
-//     </div>
-//   );
-// };

@@ -8,10 +8,14 @@ export const ProductItem = (props: {
   description: string;
   price: number;
 }) => {
-    const {id, name, description, price} = props;
+  const { id, name, description, price } = props;
   return (
     <div className="flex flex-col items-center max-w-sm rounded overflow-hidden shadow-md bg-white m-4">
-      <img className="w-48 h-48 object-cover" src={`https://via.placeholder.com/400/300`} alt={name} />
+      <img
+        className="w-48 h-48 object-cover"
+        src={`https://via.placeholder.com/400/300`}
+        alt={name}
+      />
       <div className="flex-grow flex flex-col justify-between px-6 py-4 items-center">
         <div>
           <div className="font-bold text-xl mb-2">{name}</div>
@@ -24,6 +28,5 @@ export const ProductItem = (props: {
         </div>
       </div>
     </div>
-   
   );
 };
