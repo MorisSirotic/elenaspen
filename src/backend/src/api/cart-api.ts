@@ -18,6 +18,40 @@ router.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 // Get a specific cart
+router.delete("/:id", async (req: Request, res: Response) => {
+  const session = req.headers.authorization || "";
+
+  const sessionData = await new Promise<any>((resolve, reject) => {
+    store.get(session, (err: any, session: any) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(session);
+      }
+    });
+  });
+
+  if (!sessionData) {
+    res.status(500).send({ message: "Session expired H-10" });
+    return;
+  }
+  try {
+    // Access the value of :id parameter from the URL
+    const id = req.params.id;
+
+    await CartItem.query().delete().where({ id });
+
+    // Send response indicating successful deletion
+    res
+      .status(200)
+      .json({ message: `Resource with id ${id} deleted successfully` });
+  } catch (err) {
+    // Handle error if deletion fails
+    res.status(500).json({ error: "Failed to delete resource" });
+  }
+});
+
+// Get a specific cart
 router.get("/", async (req: Request, res: Response) => {
   const session = req.headers.authorization;
   log(session);
@@ -66,7 +100,7 @@ router.get("/", async (req: Request, res: Response) => {
 
 router.post("/", async (req: Request, res: Response) => {
   const { items } = req.body;
-  log("ALOS");
+
   //prevents incorrect type from being passed
   log(items);
   if (!items && !Array.isArray(items)) {
@@ -214,14 +248,14 @@ router.post("/checkout", async (req, res) => {
     subject: `Order #${order.id}`,
   });
 
-  // 5. Delete the cart
-  // await CartItem.query()
-  //   .delete()
-  //   .whereIn(
-  //     "product_id",
-  //     cartItems.map((item: CartItem) => item.productId)
-  //   );
-  // await Cart.query().deleteById(sessionCart.id);
+  //5. Delete the cart
+  await CartItem.query()
+    .delete()
+    .whereIn(
+      "product_id",
+      cartItems.map((item: CartItem) => item.productId)
+    );
+  await Cart.query().deleteById(sessionCart.id);
 
   // 6. Send response
   res.status(200).json({ order: "Success!" });

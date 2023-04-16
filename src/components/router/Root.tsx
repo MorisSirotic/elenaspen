@@ -7,7 +7,7 @@ export const Root = () => {
     <div className="flex flex-col w-full h-full min-h-screen bg-orange-100">
       <Navbar />
 
-      <div className="m-auto">
+      <div className="w-full h-full m-auto">
         <Outlet />
       </div>
 
