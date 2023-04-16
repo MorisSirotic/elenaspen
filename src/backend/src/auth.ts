@@ -28,7 +28,7 @@ export const authenticate = async (
       return;
     }
   
-    const isPasswordValid =  bcrypt.compare(password, user.password);
+    const isPasswordValid =  bcrypt.compare(password, String(user.password));
   
     if (!isPasswordValid) {
       res.status(401).json({ message: "Invalid email or password" });

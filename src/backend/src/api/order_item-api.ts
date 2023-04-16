@@ -20,7 +20,7 @@ router.get("/", async (req: Request, res: Response) => {
     // find order_items for each order
     const ordersWithItems = await Promise.all(
       orders.map(async (order) => {
-        const items = await OrderItem.query().where("order_id", order.id);
+        const items = await OrderItem.query().where("order_id", Number(order.id));
         return { ...order, items };
       })
     );
@@ -47,6 +47,7 @@ router.get("/:id/order_items", async (req: Request, res: Response) => {
 
 // GET an order item by ID
 router.get("/:orderId/order_items/:id", async (req: Request, res: Response) => {
+
   const userId = req.session.userId; // get userId from session
   if (!userId) {
     return res.status(401).json({ error: "Unauthorized" });
@@ -59,7 +60,7 @@ router.get("/:orderId/order_items/:id", async (req: Request, res: Response) => {
     // find order_items for each order
     const ordersWithItems = await Promise.all(
       orders.map(async (order) => {
-        const items = await OrderItem.query().where("order_id", order.id);
+        const items = await OrderItem.query().where("order_id", Number(order.id));
         return { ...order, items };
       })
     );
@@ -117,7 +118,7 @@ router.post("/", async (req: Request, res: Response) => {
         order.totalAmount += quantity * product.price;
 
         await Order.query(trx)
-          .findById(order.id)
+          .findById(Number(order.id))
           .patch({ totalAmount: order.totalAmount });
 
     
