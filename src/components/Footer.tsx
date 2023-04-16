@@ -1,37 +1,42 @@
-import { FaFacebook, FaGoogle, FaInstagram } from "react-icons/fa";
+import { FaTumblr } from "react-icons/fa";
+
+import { useState } from "react";
+import axios from "axios";
 
 export const Footer = () => {
+  const [email, setEmail] = useState("");
   return (
-    <div className="flex h-80 flex-col w-full">
+    <div className="flex h-96 pt-4 flex-col w-full bg-orange-200 ">
       <div className="flex mx-2 justify-evenly items-center">
-        <span className="w-full h-1 bg-red-200" />
-        <span className="w-full text-center text-red-600 m-auto">
-          Beauty Co.
+        <span className="w-full h-1 bg-black" />
+        <span className="w-full font-semibold text-2xl text-center text-black m-auto">
+          Elena's Pen
         </span>
-        <span className="w-full h-1 bg-red-200" />
+        <span className="w-full h-1 bg-black" />
       </div>
 
       <div className="w-full flex justify-evenly text-xs">
-        <div className="flex flex-col uppercase  [&>a]:py-2 [&>a:hover]:text-red-300">
+        {/* <div className="flex flex-col uppercase  [&>a]:py-2 [&>a:hover]:text-red-300">
           <a href="/">Privacy Policy</a>
           <a href="/">Terms & Conditions</a>
           <a href="/">About</a>
-        </div>
+        </div> */}
 
         <div className="flex h-20 flex-col text-base items-center">
-          <div className="flex w-full justify-evenly  [&>a:hover]:text-red-300">
-            <a href="/" target="_blank">
+          <div className="flex w-full justify-evenly  [&>a:hover]:text-orange-400">
+            {/* <a href="/" target="_blank">
               <FaInstagram className="w-6 h-6" />
-            </a>
+            </a> */}
 
             <a href="/" target="_blank">
-              <FaGoogle className="w-6 h-6" />
+              <FaTumblr className="w-6 h-6" />
             </a>
-            <a href="/" target="_blank">
+
+            {/* <a href="/" target="_blank">
               <FaFacebook className="w-6 h-6" />
-            </a>
+            </a> */}
           </div>
-          <div className="h-12 my-2 w-1 bg-red-200 self-center shrink-0" />
+          <div className="h-12 my-2 w-1 bg-black self-center shrink-0" />
 
           <div
             id="this"
@@ -40,19 +45,40 @@ export const Footer = () => {
             <p>Weekly Newsletter</p>
             <input
               placeholder="Name@Email.com"
-              className="border-2 w-full outline-none py-2 px-1 border-b-0 border-red-300"
+              className="border-2 w-full outline-none py-2 px-1 border-b-0 border-black"
+              onChange={(e) => {
+                setEmail(e.currentTarget.value);
+              }}
             />
-            <p className="border-2   border-red-300">Subscribe</p>
+            <p
+              className="border-2 bg-yellow-300  border-black hover:bg-orange-400 cursor-pointer"
+              onClick={() => {
+                const emailData = {
+                  content: { msg: "Subsriber's Email Address: ", email: email, subject: "New Weekly Newsletter Subscriber" },
+                };
+
+                axios
+                  .post("http://localhost:8000/email/", emailData)
+                  .then((res) => {
+                    console.log(res);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              }}
+            >
+              Subscribe
+            </p>
           </div>
 
-          <span className="py-2">&copy; 2023 | Beauty Co.</span>
+          <span className="py-2">&copy; 2023 | Elena's Pen</span>
         </div>
 
-        <div className="flex flex-col  uppercase [&>a]:py-2 [&>a:hover]:text-red-300">
+        {/* <div className="flex flex-col  uppercase [&>a]:py-2 [&>a:hover]:text-red-300">
           <a href="/">Shipping Information</a>
           <a href="/">Returns / Exchanges</a>
           <a href="/">Contact</a>
-        </div>
+        </div> */}
       </div>
     </div>
   );

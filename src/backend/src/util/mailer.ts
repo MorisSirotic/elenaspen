@@ -1,6 +1,4 @@
-import { log } from "console";
 import nodemailer from "nodemailer";
-import { CartItem } from "../models/CartItem";
 import { Product } from "../models/Product";
 
 const { MAIL_HOST, MAIL_PORT, MAIL_TLS, MAIL_USER, MAIL_PASSWORD } =
@@ -19,9 +17,10 @@ export class Mailer {
    Price: <b>  ${product.price} </b> <br>
    Ordered:  <b>  ${cartItem.quantity}</b> <br>
    <br>
-    </li>`; 
+    </li>`;
     }
-    html+="<br> <br> You will be informed when your order ships out. Thank you for shopping with us!"
+    html +=
+      "<br> <br> You will be informed when your order ships out. Thank you for shopping with us!";
     html += "</ul>";
     return html;
   };

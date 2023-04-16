@@ -1,59 +1,82 @@
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-
-import woman from "../assets/woman-discount.png";
+import { ReactNode, useState } from "react";
+import { FaGrinStars, FaHeart, FaPenFancy } from "react-icons/fa";
+import pen from "../assets/pen.png";
 import { ListProduct } from "./ListProduct";
-import { ProductItem } from "./router/Items";
-import { useLoaderData } from "react-router-dom";
-import { Product } from "../backend/src/models/Product";
+import axios from "axios";
 
 export const Top = () => {
+  const [email, setEmail] = useState("");
+
   return (
-    <div className="flex flex-col h-full w-full bg-gray-200 items-center">
-      <div className="flex w-full h-full items-center md:items-stretch flex-col md:flex-row justify-between max-w-6xl  bg-red-500 ">
-        <div className="flex flex-col max-w-[400px] justify-evenly p-4">
-          <h2 className="text-2xl">Healthy Skin Is A Reflection Of Wellness</h2>
+    <div className="flex flex-col h-full w-full shrink items-center">
+      <div className="flex w-full h-full items-center md:items-stretch flex-col md:flex-row justify-between max-w-6xl  bg-orange-200 ">
+        <div className="flex flex-col max-w-[300px] justify-evenly p-4">
+          <h2 className="text-2xl">
+            <span className="font-semibold text-4xl">Elena's Pen:</span>{" "}
+            Unlocking Worlds with Words - Professional Author Services for Hire
+          </h2>
           <span className="text-sm py-2">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor
-            voluptatum natus magnam!
+            Get your own custom fanfiction and immerse yourself in it!
           </span>
 
-          <span className="underline font-bold py-2">View All Products</span>
+          <span className="flex flex-col font-bold py-2">
+            Get Notified On Discounts
+            <span className="underline"> Subscribe Below!</span>
+          </span>
 
-          <div className="flex w-full  self-end justify-between">
-            <div className="flex w-full">
-              <span className="flex w-6 h-6 bg-slate-400 rounded-full border-2 items-center justify-center">
-                <span className="bg-black w-1 h-1 rounded-full " />
-              </span>
-              <span className="flex w-6 h-6 bg-slate-400 rounded-full border-2 items-center justify-center">
-                <span className="bg-black w-1 h-1 rounded-full " />
-              </span>
-              <span className="flex w-6 h-6 bg-slate-400 rounded-full border-2 items-center justify-center">
-                <span className="bg-black w-1 h-1 rounded-full " />
-              </span>
-              <span className="flex w-6 h-6 bg-slate-400 rounded-full border-2 items-center justify-center">
-                <span className="bg-black w-1 h-1 rounded-full " />
-              </span>
-            </div>
+          <div className="flex ">
+            <input
+              className="flex w-full max-w-md sm:flex-row flex-col p-2 sm:bg-white rounded-s-full outline-none"
+              onChange={(e) => {
+                setEmail(e.currentTarget.value);
+              }}
+            />
 
-            <div className="flex">
-              <FaChevronLeft />
-              <FaChevronRight />
+            <div className="flex flex-col bg-yellow-300 rounded-e-full items-center p-2 hover:bg-orange-400 cursor-pointer">
+              <span
+                className="px-2"
+                onClick={() => {
+                  // Send email data as JSON in request body
+                  const emailData = {
+                 
+                    content: {msg:"Subscriber's Email Address: ", email:email, subject: "New Discount Subscriber"},
+                  };
+
+                  axios.post("http://localhost:8000/email/", emailData).then((res) => {
+                    console.log(res);
+                  });
+                }}
+              >
+                Subscribe
+              </span>
             </div>
           </div>
         </div>
 
-        <div className="flex self-center w-80 h-80 sm:w-96 sm:h-96 bg-yellow-400 rounded-full ">
-          <div className="m-auto">ssssssssssssssssss</div>
+        <div className="flex self-center w-80 h-80 sm:w-96 sm:h-96 bg-white rounded-full ">
+          <img src={pen} className="m-auto w-full h-full rounded-full"></img>
         </div>
       </div>
 
-      <div className="flex w-full">
-        <CardTop title="Skincare" message="Organic ingredients" />
-        <CardTop title="Makeup" message="Perfect and natural makeup" />
-        <CardTop title=" What's New" message="Shop Our New Arrivals" />
+      <div className="flex w-full mt-6">
+        <CardTop
+          title="Immersive"
+          message="Indulge in your favorite fandoms"
+          icon={<FaGrinStars className="flex  m-auto" size="40" />}
+        />
+        <CardTop
+          title="Erotic"
+          message="18+ fanfiction is also available"
+          icon={<FaHeart className="flex  m-auto" size="40" />}
+        />
+        <CardTop
+          title="Requests"
+          message="Custom fanfic tailored to your liking"
+          icon={<FaPenFancy className="flex  m-auto" size="40" />}
+        />
       </div>
       <ListProduct />
-      <div className="flex flex-col  sm:w-full md:flex-row p-2 justify-center items-center">
+      {/* <div className="flex flex-col  sm:w-full md:flex-row p-2 justify-center items-center">
         <div className="w-full max-w-5xl h-96 min-w-[300px] p-2">
           <CardMid
             title="20% Off Spring Sale"
@@ -81,25 +104,28 @@ export const Top = () => {
             />
           </div>
         </div>
-      </div>
+      </div> */}
       <ListProduct />
 
       <div className="flex items-center flex-wrap sm:flex-nowrap">
-        <CardBottom />
-        <CardBottomMailForm />
+        {/* <CardBottom /> */}
+        {/* <CardBottomMailForm /> */}
       </div>
     </div>
   );
 };
 
-const CardTop = (props: { title: string; message: string }) => {
-  const { title, message } = props;
+const CardTop = (props: {
+  title: string;
+  message: string;
+  icon: ReactNode;
+}) => {
+  const { title, message, icon } = props;
   return (
-    <div className="container bg-red-200 h-52 m-2 rounded-3xl p-2">
-      <h2>{title}</h2>
-      <p>{message}</p>
-
-      <span>Learn More</span>
+    <div className="flex  flex-col container bg-orange-300 h-52 m-2 rounded-3xl p-2 align-center">
+      <h2 className="font-semibold pb-2">{title}</h2>
+      <p className="text-sm">{message}</p>
+      {icon}
     </div>
   );
 };

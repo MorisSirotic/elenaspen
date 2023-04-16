@@ -1,9 +1,11 @@
 import bcrypt from "bcrypt";
 import KnexSessionStore from "connect-session-knex";
+import { log } from "console";
 import { randomUUID } from "crypto";
 import dotenv from "dotenv";
 import express from "express";
 import session from "express-session";
+import isEmail from "validator/lib/isEmail";
 import { carts } from "./api/cart-api";
 import { cartItems } from "./api/cart_item-api";
 import { orderItems } from "./api/order_item-api";
@@ -15,6 +17,7 @@ import db from "./db";
 import { Cart } from "./models/Cart";
 import { CartItem } from "./models/CartItem";
 import { User } from "./models/User";
+import { Mailer } from "./util/mailer";
 
 //guest
 export interface GuestFields {
@@ -47,7 +50,6 @@ const { PORT } = process.env;
 const StoreFactory = KnexSessionStore(session);
 
 export const store = new StoreFactory({ knex: db });
-
 
 app.use((req, res, next) => {
   const allowedOrigins = ["http://localhost:5173", "http://localhost:8000"]; // Update with your frontend's origin
@@ -123,6 +125,30 @@ app.post("/register", async (req, res) => {
   } catch (error) {
     res.status(500).json(error);
   }
+});
+
+app.post("/email", (req, res) => {
+
+
+  const {msg, email, subject}: any = req.body.content;
+  
+  try {
+    
+    if (!isEmail(email)) {
+      res.status(403).send("email format is wrong");
+      return;
+    } else {
+      Mailer.sendMail({
+        content:  msg + " " + email,
+        recipient: "moris.webdesigns@gmail.com",
+        subject,
+      });
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+
+  // res.json({ message: "Login successful", user: res.locals.user });
 });
 
 app.post("/login", authenticate, (req, res) => {

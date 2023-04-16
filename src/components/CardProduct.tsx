@@ -7,20 +7,20 @@ export const CardProduct = (props: {
   price: number;
 }) => {
   return (
-    <div className="flex flex-col sm:flex-row m-2 items-center bg-slate-300 ">
+    <div className="flex flex-col sm:flex-row m-2 items-center bg-orange-200 shadow-lg">
       <img
         className="w-full h-full md:w-3/6 max-w-sm  object-cover"
         src="https://via.placeholder.com/400/300"
       />
 
-      <div className="flex h-full flex-col w-full self-start p-8 bg-slate-300 max-w-sm ">
+      <div className="flex h-full flex-col w-full self-start p-8  max-w-sm ">
         <span className="text-2xl font-semibold pb-2 self-center">
           {props.name}
         </span>
         <span className="pb-2 self-center"> {props.description}</span>
         <div className="flex justify-around mt-auto p-2">
           <div>
-            <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-2xl font-semibold text-gray-700 mr-2">
+            <span className="inline-block  rounded-full px-3 py-1 text-2xl font-semibold text-gray-700 mr-2">
               ${props.price}
             </span>
           </div>
@@ -37,7 +37,7 @@ export const CardProduct = (props: {
               });
              
             }}
-            className="text-2xl w-full"
+            className="text-2xl w-full bg-orange-300 rounded-full hover:bg-yellow-400"
           >
             Add
           </button>
