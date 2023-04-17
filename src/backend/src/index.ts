@@ -18,6 +18,7 @@ import { Cart } from "./models/Cart";
 import { CartItem } from "./models/CartItem";
 import { User } from "./models/User";
 import { Mailer } from "./util/mailer";
+import cors from "cors";
 
 //guest
 export interface GuestFields {
@@ -51,23 +52,36 @@ const StoreFactory = KnexSessionStore(session);
 
 export const store = new StoreFactory({ knex: db });
 
-app.use((req, res, next) => {
-  const allowedOrigins = ["http://localhost:5173", "http://localhost:8000"]; // Update with your frontend's origin
-  const origin = req.headers.origin;
+app.use(
+  cors({
+    origin: "*",
+    allowedHeaders: [
+      "Origin",
+      " X-Requested-With",
+      "Content-Type",
+      "Accept",
+      "Authorization",
+    ],
+  })
+);
 
-  if (allowedOrigins.includes(String(origin))) {
-    res.setHeader("Access-Control-Allow-Origin", String(origin));
-  }
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  );
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  next();
-});
+// app.use((req, res, next) => {
+//   // const allowedOrigins = ["http://localhost:5173", "http://localhost:8000"]; // Update with your frontend's origin
+//   // const origin = req.headers.origin;
+
+//   // // if (allowedOrigins.includes(String(origin))) {
+//   //   res.setHeader("Access-Control-Allow-Origin", "*");
+//   // // }
+//   // res.header(
+//   //   "Access-Control-Allow-Methods",
+//   //   "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+//   // );
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+//   );
+//   next();
+// });
 //TODO: CHANGE THE SECRET LATER
 app.use(
   session({
@@ -128,18 +142,15 @@ app.post("/register", async (req, res) => {
 });
 
 app.post("/email", (req, res) => {
+  const { msg, email, subject }: any = req.body.content;
 
-
-  const {msg, email, subject}: any = req.body.content;
-  
   try {
-    
     if (!isEmail(email)) {
       res.status(403).send("email format is wrong");
       return;
     } else {
       Mailer.sendMail({
-        content:  msg + " " + email,
+        content: msg + " " + email,
         recipient: "moris.webdesigns@gmail.com",
         subject,
       });
