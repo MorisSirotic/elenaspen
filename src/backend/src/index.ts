@@ -22,7 +22,6 @@ import cors from "cors";
 import fs from "fs";
 import https from "https";
 
-
 //guest
 export interface GuestFields {
   firstName: string;
@@ -68,23 +67,6 @@ app.use(
   })
 );
 
-// app.use((req, res, next) => {
-//   // const allowedOrigins = ["http://localhost:5173", "http://localhost:8000"]; // Update with your frontend's origin
-//   // const origin = req.headers.origin;
-
-//   // // if (allowedOrigins.includes(String(origin))) {
-//   //   res.setHeader("Access-Control-Allow-Origin", "*");
-//   // // }
-//   // res.header(
-//   //   "Access-Control-Allow-Methods",
-//   //   "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-//   // );
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-//   );
-//   next();
-// });
 //TODO: CHANGE THE SECRET LATER
 app.use(
   session({
@@ -181,21 +163,29 @@ app.use("/carts", cartItems);
 app.use("/orders", orderItems);
 app.use("/stripe", stripe);
 // Load the SSL certificates
-const privateKey = fs.readFileSync("/etc/letsencrypt/live/elenaspen.com/privkey.pem", "utf8");
-const certificate = fs.readFileSync("/etc/letsencrypt/live/elenaspen.com/fullchain.pem", "utf8");
-const ca = fs.readFileSync("/etc/letsencrypt/live/elenaspen.com/chain.pem", "utf8");
+const privateKey = fs.readFileSync(
+  "/etc/letsencrypt/live/elenaspen.com/privkey.pem",
+  "utf8"
+);
+const certificate = fs.readFileSync(
+  "/etc/letsencrypt/live/elenaspen.com/fullchain.pem",
+  "utf8"
+);
+const ca = fs.readFileSync(
+  "/etc/letsencrypt/live/elenaspen.com/chain.pem",
+  "utf8"
+);
 
-
-const credentials = { // Create a credentials object with the SSL certificates
-    key: privateKey,
-    cert: certificate,
-    ca: ca
+const credentials = {
+  // Create a credentials object with the SSL certificates
+  key: privateKey,
+  cert: certificate,
+  ca: ca,
 };
 
 const httpsServer = https.createServer(credentials, app); // Create an HTTPS server with the S$
 
-httpsServer.listen(3001, () => { // Start the HTTPS server on port 3001
-    console.log("Server listening on port 3001 with HTTPS!");
+httpsServer.listen(3001, () => {
+  // Start the HTTPS server on port 3001
+  console.log("Server listening on port 3001 with HTTPS!");
 });
-
-
