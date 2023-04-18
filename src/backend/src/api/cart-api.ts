@@ -13,7 +13,6 @@ const router = express.Router();
 
 // middleware that is specific to this router
 router.use((req: Request, res: Response, next: NextFunction) => {
-  console.log("Time: ", Date.now());
   next();
 });
 

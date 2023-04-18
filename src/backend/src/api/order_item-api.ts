@@ -135,7 +135,7 @@ router.post("/", async (req: Request, res: Response) => {
     res.json({ order, newOrderItems });
   } catch (error) {
     await trx.rollback();
-    console.log(error);
+  
     res.status(500).json({ error: "Unable to create order" });
   }
 });

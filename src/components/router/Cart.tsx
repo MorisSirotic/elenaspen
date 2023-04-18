@@ -20,15 +20,15 @@ export const Cart = () => {
               quantity: item.quantity,
             }}
             onIncrease={() => {
-              console.log("on increase");
+           
             }}
             onDecrease={() => {
-              console.log("on increase");
+           
             }}
             onRemove={() => {
-              console.log("on remove");
+             
               axios
-                .delete(`http://localhost:8000/cart/${item.id}`, {
+                .delete(`https://elenaspen.com:3001/cart/${item.id}`, {
                   headers: { Authorization: getSessionId() },
                 })
                 .then((res) => {
@@ -44,9 +44,9 @@ export const Cart = () => {
         );
       })}
 
-      {data.length <= 0 && <div> Cart is empty</div>}
+      {uiData.length <= 0 && <div className="h-fit"> Cart is empty</div>}
 
-      {data.length >= 1 && (
+      {uiData.length >= 1 && (
         <div className="w-full max-w-sm">
           <Link className="" to="/checkout">
             <button className="w-full bg-orange-300 hover:bg-orange-400 p-2 mt-6">

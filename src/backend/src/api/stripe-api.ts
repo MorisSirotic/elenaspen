@@ -21,7 +21,6 @@ const stripe = new Stripe(String(STIPE_PRIVATE_KEY), {
 
 // middleware that is specific to this router
 router.use((req: Request, res: Response, next: NextFunction) => {
-  console.log("Time: ", Date.now() + " stripe" + MAIL_RECEPIENT_DEV);
   next();
 });
 
@@ -133,7 +132,7 @@ const createOrder = async (
     });
   } catch (error) {
     await trx.rollback();
-    console.log(error);
+   
   }
 };
 

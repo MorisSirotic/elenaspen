@@ -2,10 +2,9 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useEffect, useState } from "react";
 import { useLoaderData } from "react-router-dom";
+import { getSessionId } from "../../services/Cart.service";
 import { CartItem } from "./Cart";
 import Stripe from "./Stripe";
-import axios, { AxiosResponse } from "axios";
-import { getSessionId } from "../../services/Cart.service";
 
 export const Checkout = () => {
   const stripePromise = loadStripe(
@@ -16,7 +15,7 @@ export const Checkout = () => {
   const [clientSecret, setClientSecret] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:8000/stripe/cpi", {
+    fetch("https://elenaspen.com:3001/stripe/cpi", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

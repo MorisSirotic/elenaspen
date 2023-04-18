@@ -1,8 +1,7 @@
 import axios, { AxiosResponse } from "axios";
+//https://elenaspen.com:3001
 // Store the session ID in sessionStorage
 export const setSessionId = (sessionId: string) => {
-  console.log("YeS I AM ");
-
   sessionStorage.setItem("sessionId", sessionId);
 };
 
@@ -15,7 +14,7 @@ export class CartService {
   private readonly baseUrl: string;
 
   constructor() {
-    this.baseUrl = "http://localhost:8000/cart";
+    this.baseUrl = "https://elenaspen.com:3001/cart";
   }
 
   async getCart(): Promise<any> {
@@ -24,8 +23,8 @@ export class CartService {
       const response: AxiosResponse = await axios.get(this.baseUrl, {
         headers: { Authorization: sessionId },
       });
-      console.log(response.status);
-      
+    
+
       if (response.status === 204) {
         return [];
       } else {
@@ -41,23 +40,25 @@ export class CartService {
       const response: AxiosResponse = await axios.post(this.baseUrl, { items });
       return response.data;
     } catch (error) {
-      console.error("Error updating cart:", error);
+      
       throw error;
     }
   }
 }
-export const  addItemsToCart  = async(items: any[]): Promise<any> =>{
+export const addItemsToCart = async (items: any[]): Promise<any> => {
   const sessionId = getSessionId();
   try {
- 
-    const response: AxiosResponse = await axios.post("http://localhost:8000/cart", {items},{
-      headers: { Authorization: sessionId },
-    });
+    const response: AxiosResponse = await axios.post(
+      "https://elenaspen.com:3001/cart",
+      { items },
+      {
+        headers: { Authorization: sessionId },
+      }
+    );
 
- 
     return response.data;
   } catch (error) {
-    console.error("Error updating cart:", error);
+  
     throw error;
   }
-}
+};

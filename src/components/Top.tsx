@@ -1,11 +1,18 @@
+import axios from "axios";
 import { ReactNode, useState } from "react";
 import { FaGrinStars, FaHeart, FaPenFancy } from "react-icons/fa";
 import pen from "../assets/pen.png";
 import { ListProduct } from "./ListProduct";
-import axios from "axios";
 
 export const Top = () => {
   const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState<boolean>(false);
+  const [error, setError] = useState<{ message: string; active: boolean }>({
+    active: false,
+    message: "",
+  });
+
+  const disabledButton = "bg-gray-500 cursor-not-allowed hover:bg-gray-500";
 
   return (
     <div className="flex flex-col h-full w-full shrink items-center">
@@ -26,30 +33,51 @@ export const Top = () => {
 
           <div className="flex ">
             <input
+              disabled={subscribed}
               className="flex w-full max-w-md sm:flex-row flex-col p-2 sm:bg-white rounded-s-full outline-none"
               onChange={(e) => {
                 setEmail(e.currentTarget.value);
               }}
             />
 
-            <div className="flex flex-col bg-yellow-300 rounded-e-full items-center p-2 hover:bg-orange-400 cursor-pointer">
-              <span
+            <div
+              className={`flex flex-col bg-yellow-300 rounded-e-full items-center p-2 hover:bg-orange-400 cursor-pointer
+            ${subscribed ? disabledButton : ""}`}
+            >
+              <button
+                disabled={subscribed}
                 className="px-2"
                 onClick={() => {
                   // Send email data as JSON in request body
                   const emailData = {
-                 
-                    content: {msg:"Subscriber's Email Address: ", email:email, subject: "New Discount Subscriber"},
+                    content: {
+                      msg: "Subscriber's Email Address: ",
+                      email: email,
+                      subject: "New Discount Subscriber",
+                    },
                   };
 
-                  axios.post("http://localhost:8000/email/", emailData).then((res) => {
-                    console.log(res);
-                  });
+                  axios
+                    .post("https://elenaspen.com:3001/email/", emailData)
+                    .then((res) => {
+                      setSubscribed(true);
+
+                      setError({ ...error, active: !error.active });
+                    })
+                    .catch((err) => {
+                      setError({
+                        active: !error.active,
+                        message: err.response.data.error,
+                      });
+                    });
                 }}
               >
-                Subscribe
-              </span>
+                {subscribed ? "Subscribed" : "Subscribe"}
+              </button>
             </div>
+          </div>
+          <div className="flex self-center text-red-500 font-bold text-xl">
+            {error.active ? String(error.message) : ""}
           </div>
         </div>
 
@@ -105,7 +133,6 @@ export const Top = () => {
           </div>
         </div>
       </div> */}
-      <ListProduct />
 
       <div className="flex items-center flex-wrap sm:flex-nowrap">
         {/* <CardBottom /> */}

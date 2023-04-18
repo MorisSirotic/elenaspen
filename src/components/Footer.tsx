@@ -1,10 +1,18 @@
 import { FaTumblr } from "react-icons/fa";
 
-import { useState } from "react";
 import axios from "axios";
+import { useState } from "react";
 
 export const Footer = () => {
   const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState<boolean>(false);
+  const [error, setError] = useState<{ message: string; active: boolean }>({
+    active: false,
+    message: "",
+  });
+
+  const disabledButton = "bg-gray-500 cursor-not-allowed hover:bg-gray-500";
+
   return (
     <div className="flex h-96 pt-4 flex-col w-full bg-orange-200 ">
       <div className="flex mx-2 justify-evenly items-center">
@@ -44,31 +52,49 @@ export const Footer = () => {
           >
             <p>Weekly Newsletter</p>
             <input
+              disabled={subscribed}
               placeholder="Name@Email.com"
               className="border-2 w-full outline-none py-2 px-1 border-b-0 border-black"
               onChange={(e) => {
                 setEmail(e.currentTarget.value);
               }}
             />
-            <p
-              className="border-2 bg-yellow-300  border-black hover:bg-orange-400 cursor-pointer"
+            <button
+              disabled={subscribed}
+              className={`border-2 p-2 bg-yellow-300  border-black hover:bg-orange-400 cursor-n cursor-pointer
+              ${subscribed ? disabledButton : ""}
+        
+              `}
               onClick={() => {
                 const emailData = {
-                  content: { msg: "Subsriber's Email Address: ", email: email, subject: "New Weekly Newsletter Subscriber" },
+                  content: {
+                    msg: "Subsriber's Email Address: ",
+                    email: email,
+                    subject: "New Weekly Newsletter Subscriber",
+                  },
                 };
 
                 axios
-                  .post("http://localhost:8000/email/", emailData)
+                  .post("https://elenaspen.com:3001/email/", emailData)
                   .then((res) => {
-                    console.log(res);
+                    console.log("ALSO");
+                    setError({ ...error, active: false });
+                    setSubscribed(true);
                   })
                   .catch((err) => {
-                    console.log(err);
+                
+                    setError({
+                      active: !error.active,
+                      message: err.response.data.error,
+                    });
                   });
               }}
             >
-              Subscribe
-            </p>
+              {subscribed ? "Thank You For Subscribing" : "Subscribe"}
+            </button>
+            <div className="text-red-500 font-bold text-xl">
+              {error.active ? String(error.message) : ""}
+            </div>
           </div>
 
           <span className="py-2">&copy; 2023 | Elena's Pen</span>

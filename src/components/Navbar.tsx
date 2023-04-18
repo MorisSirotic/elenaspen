@@ -1,6 +1,7 @@
 import { FaShoppingCart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import logo2 from "../assets/logo2.png";
+import { CartService } from "../services/Cart.service";
 
 type LinkProps = {
   value: string;
@@ -25,12 +26,13 @@ export const Navbar = () => {
       value: "link4",
     },
   ];
+  const service = new CartService();
 
+  
   return (
     <form
       onSubmitCapture={(e) => {
         e.preventDefault();
-        console.log("captured");
       }}
     >
       <div className="flex row w-full h-14 bg-orange-300 items-center justify-between">
@@ -55,8 +57,9 @@ export const Navbar = () => {
         </div>
       </div> */}
 
-        <div className="flex w-[30%] max-w-[100px] justify-around ">
+        <div className="flex w-full  max-w-[100px] justify-around">
           <Link to="/cart">
+           
             <FaShoppingCart className="w-6 h-6 hover:text-orange-600" />
           </Link>
 

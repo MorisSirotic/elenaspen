@@ -51,9 +51,9 @@ export class Mailer {
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.error("Error sending email:", error);
+        
       } else {
-        console.log("Email sent:", info.response);
+       
       }
     });
   };

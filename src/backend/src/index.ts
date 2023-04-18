@@ -19,6 +19,9 @@ import { CartItem } from "./models/CartItem";
 import { User } from "./models/User";
 import { Mailer } from "./util/mailer";
 import cors from "cors";
+import fs from "fs";
+import https from "https";
+
 
 //guest
 export interface GuestFields {
@@ -46,7 +49,7 @@ dotenv.config();
 
 const app = express();
 
-const { PORT } = process.env;
+const { PORT, MAIL_RECEPIENT_DEV } = process.env;
 
 const StoreFactory = KnexSessionStore(session);
 
@@ -54,7 +57,7 @@ export const store = new StoreFactory({ knex: db });
 
 app.use(
   cors({
-    origin: "*",
+    origin: "https://elenaspen.com:3001",
     allowedHeaders: [
       "Origin",
       " X-Requested-With",
@@ -151,7 +154,7 @@ app.post("/email", (req, res) => {
     } else {
       Mailer.sendMail({
         content: msg + " " + email,
-        recipient: "moris.webdesigns@gmail.com",
+        recipient: String(MAIL_RECEPIENT_DEV),
         subject,
       });
     }
@@ -177,7 +180,22 @@ app.use("/cart", carts);
 app.use("/carts", cartItems);
 app.use("/orders", orderItems);
 app.use("/stripe", stripe);
+// Load the SSL certificates
+const privateKey = fs.readFileSync("/etc/letsencrypt/live/elenaspen.com/privkey.pem", "utf8");
+const certificate = fs.readFileSync("/etc/letsencrypt/live/elenaspen.com/fullchain.pem", "utf8");
+const ca = fs.readFileSync("/etc/letsencrypt/live/elenaspen.com/chain.pem", "utf8");
 
-app.listen(PORT, () => {
-  console.log(`[server]: Server is runninssssgs at http://localhost:${PORT}`);
+
+const credentials = { // Create a credentials object with the SSL certificates
+    key: privateKey,
+    cert: certificate,
+    ca: ca
+};
+
+const httpsServer = https.createServer(credentials, app); // Create an HTTPS server with the S$
+
+httpsServer.listen(3001, () => { // Start the HTTPS server on port 3001
+    console.log("Server listening on port 3001 with HTTPS!");
 });
+
+

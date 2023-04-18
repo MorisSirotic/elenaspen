@@ -1,4 +1,8 @@
-import { addItemsToCart, getSessionId, setSessionId } from "../services/Cart.service";
+import {
+  addItemsToCart,
+  getSessionId,
+  setSessionId,
+} from "../services/Cart.service";
 
 export const CardProduct = (props: {
   id: string;
@@ -26,16 +30,13 @@ export const CardProduct = (props: {
           </div>
           <button
             onClick={() => {
-              addItemsToCart([{ productId: props.id, quantity: 1 }]).then(res => {
-                console.log("ressss");
-                
-                console.log(res);
-                
-                if(!getSessionId()){
-                  setSessionId(res.sessId);
+              addItemsToCart([{ productId: props.id, quantity: 1 }]).then(
+                (res) => {
+                  if (!getSessionId()) {
+                    setSessionId(res.sessId);
+                  }
                 }
-              });
-             
+              );
             }}
             className="text-2xl w-full bg-orange-300 rounded-full hover:bg-yellow-400"
           >

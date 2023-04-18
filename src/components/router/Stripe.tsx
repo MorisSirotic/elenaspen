@@ -31,10 +31,6 @@ export default function Stripe() {
     stripe
       .retrievePaymentIntent(clientSecret)
       .then(({ paymentIntent }: any) => {
-        console.log("ya");
-
-        console.log(paymentIntent.object);
-
         switch (paymentIntent.status) {
           case "succeeded":
             setMessage("Payment succeeded!");
@@ -92,7 +88,7 @@ export default function Stripe() {
 
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
-      <div className="bg-white max-w-md mx-auto p-6 rounded-lg shadow-md">
+      {/* <div className="bg-white max-w-md mx-auto p-6 rounded-lg shadow-md">
         <h2 className="text-2xl font-bold mb-6">Checkout</h2>
 
         <label className="block mb-4">
@@ -120,7 +116,7 @@ export default function Stripe() {
             placeholder="email@address.com"
           />
         </label>
-      </div>
+      </div> */}
 
       <LinkAuthenticationElement
         id="link-authentication-element"
