@@ -9,13 +9,14 @@ export const Cart = () => {
   const [uiData, setUiData] = useState(data);
 
   useEffect(() => {
-    uiData.map((item) => setTotal(item.product.price));
+    const totalPrice = uiData.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+    setTotal(totalPrice);
   }, [uiData]);
 
   return (
     <div className="flex flex-col items-center">
       {uiData.map((item, index) => {
-        setTotal(total + item.product.price);
+       
         return (
           <Item
             key={index}
