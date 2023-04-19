@@ -96,17 +96,18 @@ const createOrder = async (
         log("ID:" + productId);
         log("QUANTITY:" + quantity);
         const product = await Product.query(trx).findById(productId);
-
+        log("PRODUCT:" + product);
         if (!product) {
+          log("PRODUCT NOT FOUND")
           await trx.rollback();
           return;
         }
 
-        if (product.stock < quantity) {
-          await trx.rollback();
-          //TODO: throw an error here
-          return;
-        }
+        // if (product.stock < quantity) {
+        //   await trx.rollback();
+        //   //TODO: throw an error here
+        //   return;
+        // }
 
         await Product.query(trx)
           .findById(productId)
@@ -160,8 +161,8 @@ router.post("/cpi", async (req, res) => {
   const formattedItems: any = [];
 
   const session = req.headers.authorization;
-
-  items.cart_items.map((item: any) => {
+ 
+  items.map((item: any) => {
     const { id, cartId, productId, quantity } = item;
 
     formattedItems.push({ id, cartId, productId, quantity });
