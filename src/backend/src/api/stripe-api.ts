@@ -138,16 +138,14 @@ const createOrder = async (
 router.post("/cpi", async (req, res) => {
   const { items } = req.body;
 
-  //"id\":75,\"cartId\":45,\"productId\":1,\"quantity
-
   const formattedItems: any = [];
 
   const _items = items as [];
 
   _items.map((item) => {
     const { id, cartId, productId, quantity } = item;
-
-    formattedItems.push(JSON.stringify({ id, cartId, productId, quantity }));
+    
+    formattedItems.push({ id, cartId, productId, quantity });
   });
 
   const paymentIntent = await stripe.paymentIntents.create({
@@ -157,7 +155,7 @@ router.post("/cpi", async (req, res) => {
       enabled: true,
     },
     metadata: {
-      items: JSON.stringify(items),
+      items: JSON.stringify(formattedItems),
       sessId: null,
     },
   });
