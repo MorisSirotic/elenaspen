@@ -1,10 +1,12 @@
 import bcrypt from "bcrypt";
 import KnexSessionStore from "connect-session-knex";
-import { log } from "console";
+import cors from "cors";
 import { randomUUID } from "crypto";
 import dotenv from "dotenv";
 import express from "express";
 import session from "express-session";
+import fs from "fs";
+import https from "https";
 import isEmail from "validator/lib/isEmail";
 import { carts } from "./api/cart-api";
 import { cartItems } from "./api/cart_item-api";
@@ -18,9 +20,6 @@ import { Cart } from "./models/Cart";
 import { CartItem } from "./models/CartItem";
 import { User } from "./models/User";
 import { Mailer } from "./util/mailer";
-import cors from "cors";
-import fs from "fs";
-import https from "https";
 
 //guest
 export interface GuestFields {
@@ -66,6 +65,13 @@ app.use(
     ],
   })
 );
+
+app.use("/api", (req, res, next) => {
+  // This middleware will be executed for all endpoints that start with /api
+  // You can use this to add common functionality or validation to these endpoints
+
+  next(); // Call next to pass control to the next middleware or route handler
+});
 
 //TODO: CHANGE THE SECRET LATER
 app.use(
@@ -125,9 +131,9 @@ app.post("/register", async (req, res) => {
     res.status(500).json(error);
   }
 });
-app.get("/api/test",(req,res) => {
+app.get("/test", (req, res) => {
   res.send("Yep");
-})
+});
 app.post("/email", (req, res) => {
   const { msg, email, subject }: any = req.body.content;
 
