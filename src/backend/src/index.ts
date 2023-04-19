@@ -134,7 +134,7 @@ app.post("/api/email", (req, res) => {
 
   try {
     if (!isEmail(email)) {
-      res.status(403).send("email format is wrong");
+      res.status(403).json({error:"email format is wrong"});
       return;
     } else {
       Mailer.sendMail({

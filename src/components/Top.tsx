@@ -61,10 +61,13 @@ export const Top = () => {
                     .post("https://elenaspen.com/api/email/", emailData)
                     .then((res) => {
                       setSubscribed(true);
+                      console.log(res);
 
                       setError({ ...error, active: !error.active });
                     })
                     .catch((err) => {
+                      console.log(err);
+
                       setError({
                         active: !error.active,
                         message: err.response.data.error,
