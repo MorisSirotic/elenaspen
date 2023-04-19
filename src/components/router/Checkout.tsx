@@ -15,7 +15,7 @@ export const Checkout = () => {
   const [clientSecret, setClientSecret] = useState("");
 
   useEffect(() => {
-    fetch("https://elenaspen.com:3001/stripe/cpi", {
+    fetch("https://elenaspen.com/api/stripe/cpi", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

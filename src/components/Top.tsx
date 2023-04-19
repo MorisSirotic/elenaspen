@@ -58,7 +58,7 @@ export const Top = () => {
                   };
 
                   axios
-                    .post("https://elenaspen.com:3001/email/", emailData)
+                    .post("https://elenaspen.com/api/email/", emailData)
                     .then((res) => {
                       setSubscribed(true);
 

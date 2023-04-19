@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from "axios";
 export class ProductService {
   private readonly baseUrl: string;
   constructor() {
-    this.baseUrl = "https://elenaspen.com:3001/products";
+    this.baseUrl = "https://elenaspen.com/api/products";
   }
 
   async getProducts(): Promise<any> {

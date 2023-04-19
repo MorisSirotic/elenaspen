@@ -160,11 +160,11 @@ app.get("/profile", isAuthenticated, (req, res) => {
 });
 
 app.use("/users", users);
-app.use("/products", products);
-app.use("/cart", carts);
+app.use("/api/products", products);
+app.use("/api/cart", carts);
 app.use("/carts", cartItems);
 app.use("/orders", orderItems);
-app.use("/stripe", stripe);
+app.use("/api/stripe", stripe);
 // Load the SSL certificates
 const privateKey = fs.readFileSync(
   "/etc/letsencrypt/live/elenaspen.com/privkey.pem",

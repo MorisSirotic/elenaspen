@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-//https://elenaspen.com:3001
+
 // Store the session ID in sessionStorage
 export const setSessionId = (sessionId: string) => {
   sessionStorage.setItem("sessionId", sessionId);
@@ -14,7 +14,7 @@ export class CartService {
   private readonly baseUrl: string;
 
   constructor() {
-    this.baseUrl = "https://elenaspen.com:3001/cart";
+    this.baseUrl = "https://elenaspen.com/api/cart";
   }
 
   async getCart(): Promise<any> {
@@ -49,7 +49,7 @@ export const addItemsToCart = async (items: any[]): Promise<any> => {
   const sessionId = getSessionId();
   try {
     const response: AxiosResponse = await axios.post(
-      "https://elenaspen.com:3001/cart",
+      "https://elenaspen.com/api/cart",
       { items },
       {
         headers: { Authorization: sessionId },

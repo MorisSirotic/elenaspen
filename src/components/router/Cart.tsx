@@ -28,7 +28,7 @@ export const Cart = () => {
             onRemove={() => {
              
               axios
-                .delete(`https://elenaspen.com:3001/cart/${item.id}`, {
+                .delete(`https://elenaspen.com/api/cart/${item.id}`, {
                   headers: { Authorization: getSessionId() },
                 })
                 .then((res) => {
