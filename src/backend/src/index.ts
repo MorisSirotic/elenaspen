@@ -129,7 +129,7 @@ app.post("/register", async (req, res) => {
 app.get("/api/test", (req, res) => {
   res.send("Yep");
 });
-app.post("/email", (req, res) => {
+app.post("/api/email", (req, res) => {
   const { msg, email, subject }: any = req.body.content;
 
   try {
