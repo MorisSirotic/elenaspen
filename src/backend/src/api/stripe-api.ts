@@ -63,8 +63,13 @@ const createOrder = async (
   orderItems: any[]
 ) => {
   if (!session || !orderItems) {
+    log("first if statment(shouldn't be here)");
+    log("SESSION:"+session)
+    log("ITEMS:"+orderItems);
     return;
   }
+
+  log("BEGINING")
   const sessionData = await new Promise<any>((resolve, reject) => {
     store.get(session, (err: any, session: any) => {
       if (err) {
@@ -87,7 +92,9 @@ const createOrder = async (
     await Promise.all(
       orderItems.map(async (item: OrderItem) => {
         const { productId, quantity } = item;
-
+log("MAPPING ITEM IN THE LOOP")
+log("ID:" + productId);
+log("QUANTITY:" + quantity)
         const product = await Product.query(trx).findById(productId);
 
         if (!product) {
@@ -192,7 +199,7 @@ router.post(
 
         const email = event.data.object.billing_details.email;
         createOrder(session, email, items);
-
+log("I GOT THE RESPONSE FORM STRIPE")
         break;
 
       default:
