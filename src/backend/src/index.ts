@@ -65,8 +65,8 @@ app.use(
     ],
   })
 );
-
-app.use("/api", (req, res, next) => {
+const router = express.Router();
+router.use("/api", (req, res, next) => {
   // This middleware will be executed for all endpoints that start with /api
   // You can use this to add common functionality or validation to these endpoints
 
@@ -164,12 +164,12 @@ app.get("/profile", isAuthenticated, (req, res) => {
   res.json(user);
 });
 
-app.use("/users", users);
-app.use("/products", products);
-app.use("/cart", carts);
-app.use("/carts", cartItems);
-app.use("/orders", orderItems);
-app.use("/stripe", stripe);
+router.use("/users", users);
+router.use("/products", products);
+router.use("/cart", carts);
+router.use("/carts", cartItems);
+router.use("/orders", orderItems);
+router.use("/stripe", stripe);
 // Load the SSL certificates
 const privateKey = fs.readFileSync(
   "/etc/letsencrypt/live/elenaspen.com/privkey.pem",
@@ -190,7 +190,7 @@ const credentials = {
   cert: certificate,
   ca: ca,
 };
-
+app.use(router);
 const httpsServer = https.createServer(credentials, app); // Create an HTTPS server with the S$
 
 httpsServer.listen(3001, () => {
