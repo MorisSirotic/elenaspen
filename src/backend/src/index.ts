@@ -65,13 +65,8 @@ app.use(
     ],
   })
 );
-const router = express.Router();
-router.use("/api", (req, res, next) => {
-  // This middleware will be executed for all endpoints that start with /api
-  // You can use this to add common functionality or validation to these endpoints
 
-  next(); // Call next to pass control to the next middleware or route handler
-});
+
 
 //TODO: CHANGE THE SECRET LATER
 app.use(
@@ -131,7 +126,7 @@ app.post("/register", async (req, res) => {
     res.status(500).json(error);
   }
 });
-app.get("/test", (req, res) => {
+app.get("/api/test", (req, res) => {
   res.send("Yep");
 });
 app.post("/email", (req, res) => {
@@ -164,12 +159,12 @@ app.get("/profile", isAuthenticated, (req, res) => {
   res.json(user);
 });
 
-router.use("/users", users);
-router.use("/products", products);
-router.use("/cart", carts);
-router.use("/carts", cartItems);
-router.use("/orders", orderItems);
-router.use("/stripe", stripe);
+app.use("/users", users);
+app.use("/products", products);
+app.use("/cart", carts);
+app.use("/carts", cartItems);
+app.use("/orders", orderItems);
+app.use("/stripe", stripe);
 // Load the SSL certificates
 const privateKey = fs.readFileSync(
   "/etc/letsencrypt/live/elenaspen.com/privkey.pem",
@@ -190,7 +185,7 @@ const credentials = {
   cert: certificate,
   ca: ca,
 };
-app.use(router);
+
 const httpsServer = https.createServer(credentials, app); // Create an HTTPS server with the S$
 
 httpsServer.listen(3001, () => {
