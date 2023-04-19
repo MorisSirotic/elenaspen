@@ -142,6 +142,8 @@ router.post("/cpi", async (req, res) => {
 
   const _items = items as [];
 
+  const session = req.headers.authorization;
+
   _items.map((item) => {
     const { id, cartId, productId, quantity } = item;
     
@@ -156,7 +158,7 @@ router.post("/cpi", async (req, res) => {
     },
     metadata: {
       items: JSON.stringify(formattedItems),
-      sessId: null,
+      sessId: String(session),
     },
   });
 
