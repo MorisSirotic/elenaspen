@@ -64,12 +64,12 @@ const createOrder = async (
 ) => {
   if (!session || !orderItems) {
     log("first if statment(shouldn't be here)");
-    log("SESSION:"+session)
-    log("ITEMS:"+orderItems);
+    log("SESSION:" + session);
+    log("ITEMS:" + orderItems);
     return;
   }
 
-  log("BEGINING")
+  log("BEGINING");
   const sessionData = await new Promise<any>((resolve, reject) => {
     store.get(session, (err: any, session: any) => {
       if (err) {
@@ -92,9 +92,9 @@ const createOrder = async (
     await Promise.all(
       orderItems.map(async (item: OrderItem) => {
         const { productId, quantity } = item;
-log("MAPPING ITEM IN THE LOOP")
-log("ID:" + productId);
-log("QUANTITY:" + quantity)
+        log("MAPPING ITEM IN THE LOOP");
+        log("ID:" + productId);
+        log("QUANTITY:" + quantity);
         const product = await Product.query(trx).findById(productId);
 
         if (!product) {
@@ -128,7 +128,7 @@ log("QUANTITY:" + quantity)
 
     await trx.commit();
 
-    log("MAILER DEBUG U STRIPUI HHHEHEHEH")
+    log("MAILER DEBUG U STRIPUI HHHEHEHEH");
     const cart = await Cart.query().where({ user_id: sessionData.userId });
     log("CART" + cart[0]);
 
@@ -136,21 +136,20 @@ log("QUANTITY:" + quantity)
       .$relatedQuery("cart_items")
       .withGraphFetched("product");
 
-      log("CARTITEMS CONST" +cartItems);
-    // Mailer.sendMail({
-    //   content: Mailer.generateHTML(`Your order has been received.`, cartItems),
-    //   recipient: String(MAIL_RECEPIENT_DEV),
-    //   subject: `Order #${order.id}`,
-    // });
-log("MAIL RECEIEPIEN DEV: " + String(MAIL_RECEPIENT_DEV))
+    log("CARTITEMS CONST" + cartItems);
     Mailer.sendMail({
-      content: "Ajde radi u pm",
+      content: Mailer.generateHTML(`Your order has been received.`, cartItems),
       recipient: String(MAIL_RECEPIENT_DEV),
       subject: `Order #${order.id}`,
     });
-
+    log("MAIL RECEIEPIEN DEV: " + String(MAIL_RECEPIENT_DEV));
+    // Mailer.sendMail({
+    //   content: "Ajde radi u pm",
+    //   recipient: String(MAIL_RECEPIENT_DEV),
+    //   subject: `Order #${order.id}`,
+    // });
   } catch (error) {
-    log("error u kreaciji order, trx rollback")
+    log("error u kreaciji order, trx rollback");
     await trx.rollback();
   }
 };
@@ -160,13 +159,11 @@ router.post("/cpi", async (req, res) => {
 
   const formattedItems: any = [];
 
-  const _items = items as [];
-
   const session = req.headers.authorization;
 
-  _items.map((item) => {
+  items.cart_items.map((item: any) => {
     const { id, cartId, productId, quantity } = item;
-    
+
     formattedItems.push({ id, cartId, productId, quantity });
   });
 
@@ -212,7 +209,7 @@ router.post(
 
         const email = event.data.object.billing_details.email;
         createOrder(session, email, items);
-log("I GOT THE RESPONSE FORM STRIPE")
+        log("I GOT THE RESPONSE FORM STRIPE");
         break;
 
       default:
