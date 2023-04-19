@@ -56,7 +56,7 @@ export const store = new StoreFactory({ knex: db });
 
 app.use(
   cors({
-    origin: "https://elenaspen.com:3001",
+    origin: "https://elenaspen.com:5173",
     allowedHeaders: [
       "Origin",
       " X-Requested-With",
