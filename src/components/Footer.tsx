@@ -77,7 +77,7 @@ export const Footer = () => {
                 axios
                   .post("https://elenaspen.com/api/email/", emailData)
                   .then((res) => {
-                    console.log("ALSO");
+                   
                     setError({ ...error, active: false });
                     setSubscribed(true);
                   })

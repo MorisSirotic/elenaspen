@@ -8,6 +8,11 @@ export const Cart = () => {
 
   const [uiData, setUiData] = useState(data);
 
+
+  useEffect(() => {
+    
+  }, [uiData])
+
   return (
     <div className="flex flex-col items-center">
       {uiData.map((item, index) => {
