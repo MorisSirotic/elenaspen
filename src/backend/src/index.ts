@@ -142,6 +142,7 @@ app.post("/api/email", (req, res) => {
         recipient: String(MAIL_RECEPIENT_DEV),
         subject,
       });
+      res.status(200).send();
     }
   } catch (error) {
     res.status(500).send(error);
