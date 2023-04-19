@@ -9,13 +9,11 @@ export const Cart = () => {
 
   const [uiData, setUiData] = useState(data);
 
-  useEffect(() => {
-
-  }, [uiData])
-
   return (
     <div className="flex flex-col items-center">
-      {uiData.map((item, index) => {
+      {
+      
+      uiData.map((item, index) => {
         return (
           <Item
             key={index}
@@ -41,13 +39,18 @@ export const Cart = () => {
                     // Remove the item from the array of items
                     const updatedItems = [...data]; // Make a copy of the items array
                     updatedItems.splice(index, 1); // Remove the item at the given index
-                    setUiData(updatedItems); // Update the state with the updated items array
+                    //setUiData(updatedItems); // Update the state with the updated items array
+                    
+                    return updatedItems;
                   }
                 });
             }}
           />
         );
-      })}
+      })
+      
+      
+      }
 
       {uiData.length <= 0 && <div className="h-fit"> Cart is empty</div>}
 
