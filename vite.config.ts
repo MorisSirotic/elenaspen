@@ -16,5 +16,10 @@ export default defineConfig({
         "utf8"
       ), // Path to your SSL certificate file
     },
+    hmr: {
+      protocol: "wss",
+      host: "elenaspen.com",
+      port: 5173,
+    },
   },
 });
