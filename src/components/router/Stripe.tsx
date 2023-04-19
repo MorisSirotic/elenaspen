@@ -70,7 +70,7 @@ export default function Stripe() {
               email,
             },
           },
-          return_url: "http://localhost:5173/",
+          return_url: "https://elenaspen.com/",
         },
       });
 
