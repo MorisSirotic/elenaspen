@@ -128,16 +128,29 @@ log("QUANTITY:" + quantity)
 
     await trx.commit();
 
+    log("MAILER DEBUG U STRIPUI HHHEHEHEH")
     const cart = await Cart.query().where({ user_id: sessionData.userId });
+    log("CART" + cart[0]);
+
     const cartItems = await cart[0]
       .$relatedQuery("cart_items")
       .withGraphFetched("product");
+
+      log("CARTITEMS CONST" +cartItems);
+    // Mailer.sendMail({
+    //   content: Mailer.generateHTML(`Your order has been received.`, cartItems),
+    //   recipient: String(MAIL_RECEPIENT_DEV),
+    //   subject: `Order #${order.id}`,
+    // });
+log("MAIL RECEIEPIEN DEV: " + String(MAIL_RECEPIENT_DEV))
     Mailer.sendMail({
-      content: Mailer.generateHTML(`Your order has been received.`, cartItems),
+      content: "Ajde radi u pm",
       recipient: String(MAIL_RECEPIENT_DEV),
       subject: `Order #${order.id}`,
     });
+
   } catch (error) {
+    log("error u kreaciji order, trx rollback")
     await trx.rollback();
   }
 };
