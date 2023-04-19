@@ -35,27 +35,27 @@ const calculateOrderAmount = (items: any[]) => {
   return (total * 100).toFixed(2);
 };
 
-router.post("/cpi", async (req, res) => {
-  const { items } = req.body;
+// router.post("/cpi", async (req, res) => {
+//   const { items } = req.body;
 
-  const session = req.headers.authorization;
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: Number(calculateOrderAmount(items)),
-    currency: "eur",
-    automatic_payment_methods: {
-      enabled: true,
-    },
-    metadata: {
-      items: JSON.stringify(items),
-      sessId: String(session),
-    },
-  });
+//   const session = req.headers.authorization;
+//   const paymentIntent = await stripe.paymentIntents.create({
+//     amount: Number(calculateOrderAmount(items)),
+//     currency: "eur",
+//     automatic_payment_methods: {
+//       enabled: true,
+//     },
+//     metadata: {
+//       items: JSON.stringify(items),
+//       sessId: String(session),
+//     },
+//   });
 
-  res.json({
-    clientSecret: paymentIntent.client_secret,
-    items: items,
-  });
-});
+//   res.json({
+//     clientSecret: paymentIntent.client_secret,
+//     items: items,
+//   });
+// });
 
 const createOrder = async (
   session: string,
@@ -132,12 +132,23 @@ const createOrder = async (
     });
   } catch (error) {
     await trx.rollback();
-   
   }
 };
 
 router.post("/cpi", async (req, res) => {
   const { items } = req.body;
+
+  //"id\":75,\"cartId\":45,\"productId\":1,\"quantity
+
+  const formattedItems: any = [];
+
+  const _items = items as [];
+
+  _items.map((item) => {
+    const { id, cartId, productId, quantity } = item;
+
+    formattedItems.push({ id, cartId, productId, quantity });
+  });
 
   const paymentIntent = await stripe.paymentIntents.create({
     amount: Number(calculateOrderAmount(items)),
@@ -151,11 +162,9 @@ router.post("/cpi", async (req, res) => {
     },
   });
 
-  // createOrder(req, items);
-
   res.json({
     clientSecret: paymentIntent.client_secret,
-    items: items,
+    items: formattedItems,
   });
 });
 
@@ -183,8 +192,6 @@ router.post(
 
         const email = event.data.object.billing_details.email;
         createOrder(session, email, items);
-
-        const { MAIL_RECEPIENT_DEV } = process.env;
 
         break;
 
