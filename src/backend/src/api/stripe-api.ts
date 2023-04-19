@@ -97,6 +97,7 @@ const createOrder = async (
         log("QUANTITY:" + quantity);
         const product = await Product.query(trx).findById(productId);
         log("PRODUCT:" + product);
+
         if (!product) {
           log("PRODUCT NOT FOUND")
           await trx.rollback();
@@ -150,6 +151,7 @@ const createOrder = async (
     //   subject: `Order #${order.id}`,
     // });
   } catch (error) {
+    log(error);
     log("error u kreaciji order, trx rollback");
     await trx.rollback();
   }

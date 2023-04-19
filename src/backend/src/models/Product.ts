@@ -27,7 +27,7 @@ export class Product extends Model implements ProductFields {
         name: { type: "string" },
         description: { type: "string" },
         price: { type: "number", minimum: 0 },
-        stock: { type: "integer", minimum: 0 },
+        stock: { type: "integer" },
       },
     };
   }
