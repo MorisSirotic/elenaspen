@@ -147,7 +147,7 @@ router.post("/cpi", async (req, res) => {
   _items.map((item) => {
     const { id, cartId, productId, quantity } = item;
 
-    formattedItems.push({ id, cartId, productId, quantity });
+    formattedItems.push(JSON.stringify({ id, cartId, productId, quantity }));
   });
 
   const paymentIntent = await stripe.paymentIntents.create({
