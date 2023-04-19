@@ -37,11 +37,11 @@ export const Cart = () => {
                 .then((res) => {
                   if (res.status === 200) {
                     // Remove the item from the array of items
-                    const updatedItems = [...data]; // Make a copy of the items array
-                    updatedItems.splice(index, 1); // Remove the item at the given index
-                    //setUiData(updatedItems); // Update the state with the updated items array
-                    
-                    return updatedItems;
+                    setUiData(prevState => {
+                      const updatedItems = [...prevState]; // Make a copy of the items array
+                      updatedItems.splice(index, 1); // Remove the item at the given index
+                      return updatedItems; // Return the updated items array
+                    });
                   }
                 });
             }}
