@@ -29,7 +29,7 @@ const calculateOrderAmount = (items: any[]) => {
   if (items && items.length >= 1) {
     items.map((i) => {
       log(i.product.price);
-      total += i.product.price * i.quantity;
+      total += i.product.price * 1; //i.quantity;
     });
   }
   return (total * 100).toFixed(2);
@@ -145,11 +145,7 @@ const createOrder = async (
       subject: `Order #${order.id}`,
     });
     log("MAIL RECEIEPIEN DEV: " + String(MAIL_RECEPIENT_DEV));
-    // Mailer.sendMail({
-    //   content: "Ajde radi u pm",
-    //   recipient: String(MAIL_RECEPIENT_DEV),
-    //   subject: `Order #${order.id}`,
-    // });
+ 
   } catch (error) {
     log(error);
     log("error u kreaciji order, trx rollback");

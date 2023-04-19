@@ -4,13 +4,13 @@ import { Link, useLoaderData } from "react-router-dom";
 import { getSessionId } from "../../services/Cart.service";
 
 export const Cart = () => {
-  const data = useLoaderData() as CartItem[];
+
+  const data = useLoaderData() as any[];
 
   const [uiData, setUiData] = useState(data);
 
-
   useEffect(() => {
-    
+
   }, [uiData])
 
   return (
