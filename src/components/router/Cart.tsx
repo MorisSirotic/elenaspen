@@ -4,16 +4,18 @@ import { Link, useLoaderData } from "react-router-dom";
 import { getSessionId } from "../../services/Cart.service";
 
 export const Cart = () => {
-
   const data = useLoaderData() as any[];
-
+  const [total, setTotal] = useState<number>(0);
   const [uiData, setUiData] = useState(data);
+
+  useEffect(() => {
+    uiData.map((item) => setTotal(item.product.price));
+  }, [uiData]);
 
   return (
     <div className="flex flex-col items-center">
-      {
-      
-      uiData.map((item, index) => {
+      {uiData.map((item, index) => {
+        setTotal(total + item.product.price);
         return (
           <Item
             key={index}
@@ -22,14 +24,9 @@ export const Cart = () => {
               product: item.product,
               quantity: item.quantity,
             }}
-            onIncrease={() => {
-           
-            }}
-            onDecrease={() => {
-           
-            }}
+            onIncrease={() => {}}
+            onDecrease={() => {}}
             onRemove={() => {
-             
               axios
                 .delete(`https://elenaspen.com/api/cart/${item.id}`, {
                   headers: { Authorization: getSessionId() },
@@ -37,7 +34,7 @@ export const Cart = () => {
                 .then((res) => {
                   if (res.status === 200) {
                     // Remove the item from the array of items
-                    setUiData(prevState => {
+                    setUiData((prevState) => {
                       const updatedItems = [...prevState]; // Make a copy of the items array
                       updatedItems.splice(index, 1); // Remove the item at the given index
                       return updatedItems; // Return the updated items array
@@ -47,12 +44,17 @@ export const Cart = () => {
             }}
           />
         );
-      })
-      
-      
-      }
+      })}
 
       {uiData.length <= 0 && <div className="h-fit"> Cart is empty</div>}
+
+      {uiData.length >= 1 && (
+        <div className="w-full max-w-sm">
+          <span className="text-xl font-semibold">
+            Total: <span>€{total}</span>{" "}
+          </span>
+        </div>
+      )}
 
       {uiData.length >= 1 && (
         <div className="w-full max-w-sm">
