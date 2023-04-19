@@ -125,7 +125,9 @@ app.post("/register", async (req, res) => {
     res.status(500).json(error);
   }
 });
-
+app.get("/api/test",(req,res) => {
+  res.send("Yep");
+})
 app.post("/email", (req, res) => {
   const { msg, email, subject }: any = req.body.content;
 
