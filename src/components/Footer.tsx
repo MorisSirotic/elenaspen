@@ -14,7 +14,7 @@ export const Footer = () => {
   const disabledButton = "bg-gray-500 cursor-not-allowed hover:bg-gray-500";
 
   return (
-    <div className="flex h-96 pt-4 flex-col w-full bg-orange-200 ">
+    <div className="flex h-44 pt-4 flex-col w-full bg-orange-200 ">
       <div className="flex mx-2 justify-evenly items-center">
         <span className="w-full h-1 bg-black" />
         <span className="w-full font-semibold text-2xl text-center text-black m-auto">
@@ -46,7 +46,7 @@ export const Footer = () => {
           </div>
           <div className="h-12 my-2 w-1 bg-black self-center shrink-0" />
 
-          <div
+          {/* <div
             id="this"
             className="flex w-full flex-col [&>p]:py-2 text-center p-4"
           >
@@ -95,7 +95,7 @@ export const Footer = () => {
             <div className="text-red-500 font-bold text-xl">
               {error.active ? String(error.message) : ""}
             </div>
-          </div>
+          </div> */}
 
           <span className="py-2">&copy; 2023 | Elena's Pen</span>
         </div>

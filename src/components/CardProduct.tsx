@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import {
   addItemsToCart,
   getSessionId,
@@ -10,16 +10,22 @@ export const CardProduct = (props: {
   name: string;
   description: string;
   price: number;
-
 }) => {
-
-  const [buttonText, setButtonText] = useState('Add');
+  const [buttonText, setButtonText] = useState("Add");
   const [isDisabled, setIsDisabled] = useState(false);
- 
 
-  
+  const disabledButton = isDisabled
+    ? "bg-gray-400 text-white hover:bg-gray-400"
+    : "";
+
+  const [isError, setIsError] = useState(false);
+
+  const errorButton = isError
+    ? "flex self-center text-red-500 font-semibold text-2xl"
+    : "hidden";
+
   return (
-    <div className="flex flex-col sm:flex-row m-2 items-center bg-orange-200 shadow-lg">
+    <div className="flex flex-col sm:flex-row m-2  items-center bg-orange-200 shadow-lg">
       <img
         className="w-full h-full md:w-3/6 max-w-sm  object-cover"
         src="https://via.placeholder.com/400/300"
@@ -37,53 +43,39 @@ export const CardProduct = (props: {
             </span>
           </div>
           <button
-         disabled={isDisabled}
+            disabled={isDisabled}
             onClick={() => {
-
-              setButtonText('Added');
+              setButtonText("Added");
               setIsDisabled(true);
 
-
-              addItemsToCart([{ productId: props.id, quantity: 1 }]).then(
-                (res) => {
+              addItemsToCart([{ productId: props.id, quantity: 1 }])
+                .then((res) => {
                   if (!getSessionId()) {
                     setSessionId(res.sessId);
                   }
-                  setButtonText("Add")
-                  setIsDisabled(false);
-                }
-              );
+
+                  setTimeout(() => {
+                    setButtonText("Add");
+                    setIsDisabled(false);
+                    setIsError(false);
+                  }, 500);
+                })
+                .catch((err) => {
+                  console.log(err);
+
+                  setButtonText("-");
+                  setIsError(true);
+                });
             }}
-            className="text-2xl w-full bg-orange-300 rounded-full hover:bg-yellow-400"
+            className={`text-2xl w-full bg-orange-300 rounded-full  hover:bg-yellow-400 ${disabledButton}`}
           >
             {buttonText}
           </button>
+        </div>
+        <div className={`${errorButton}`}>
+          Error Adding Item To The Cart. Please Try Again Later
         </div>
       </div>
     </div>
   );
 };
-
-// export const CardProduct = () => {
-//   return (
-//     <div className="flex flex-col w-full sm:w-4/6 flex-col m-1 bg-stone-100 shadow-lg items-center">
-//       <img
-//         className="w-full  object-cover"
-//         src="https://via.placeholder.com/400/300"
-//       />
-//       <span className="text-2xl pb-2">Name #1</span>
-//       <div className="flex self-start p-2">
-//   Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat amet corrupti quod quam provident, placeat nihil nostrum assumenda praesentium sunt adipisci fuga quasi quis eveniet quidem officiis modi quae dignissimos debitis ab voluptates illum similique. Impedit, quod error perspiciatis alias rerum inventore qui consequuntur hic recusandae, aliquam sit voluptatem corporis.
-//       </div>
-
-//       <div className="flex justify-around mt-auto p-2">
-//         <div>
-//           <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-2xl font-semibold text-gray-700 mr-2">
-//             ${22}
-//           </span>
-//         </div>
-//         <button className="text-2xl w-full">Add</button>
-//       </div>
-//     </div>
-//   );
-// };

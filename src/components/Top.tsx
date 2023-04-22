@@ -26,12 +26,17 @@ export const Top = () => {
             Get your own custom fanfiction and immerse yourself in it!
           </span>
 
-          <span className="flex flex-col font-bold py-2">
-            Get Notified On Discounts
-            <span className="underline"> Subscribe Below!</span>
+    <span className="flex flex-col font-bold py-2">
+            
+            <span className="underline"> Read more below!</span>
           </span>
 
-          <div className="flex ">
+          {/* <span className="flex flex-col font-bold py-2">
+            Get Notified On Discounts
+            <span className="underline"> Subscribe Below!</span>
+          </span> */}
+
+          {/* <div className="flex ">
             <input
               disabled={subscribed}
               className="flex w-full max-w-md sm:flex-row flex-col p-2 sm:bg-white rounded-s-full outline-none"
@@ -75,7 +80,7 @@ export const Top = () => {
                 {subscribed ? "Subscribed" : "Subscribe"}
               </button>
             </div>
-          </div>
+          </div> */}
           <div className="flex self-center text-red-500 font-bold text-xl">
             {error.active ? String(error.message) : ""}
           </div>
