@@ -149,7 +149,7 @@ const createOrder = async (
     });
 
     Mailer.sendMail({
-      content: Mailer.generateHTML(`Items ordered`, cartItems),
+      content: Mailer.generateHTML(`Items ordered`, cartItems,"Customer: "+ email),
       recipient: String(MAIL_OWNER),
       subject: `New Order From Customer | Order #${order.id}`,
     });

@@ -6,7 +6,7 @@ const { MAIL_HOST, MAIL_PORT, MAIL_TLS, MAIL_USER, MAIL_PASSWORD } =
 
 export class Mailer {
   // Generate HTML content with cartItems data
-  static generateHTML = (header: any, cartItems: any[]) => {
+  static generateHTML = (header: any, cartItems: any[], body?: string) => {
     const total = 0;
     let html = `<h1>${header}</h1>`;
     html += "<ul>";
@@ -19,8 +19,7 @@ export class Mailer {
    <br>
     </li>`;
     }
-    html +=
-      "<br> <br> You will be informed when your order ships out. Thank you for shopping with us!";
+    html += body;
     html += "</ul>";
     return html;
   };
@@ -51,9 +50,7 @@ export class Mailer {
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        
       } else {
-       
       }
     });
   };
