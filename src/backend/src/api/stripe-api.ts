@@ -11,7 +11,7 @@ import { Mailer } from "../util/mailer";
 const router = express.Router();
 
 const { STIPE_PRIVATE_KEY } = process.env;
-const { MAIL_RECEPIENT_DEV } = process.env;
+const { MAIL_RECEPIENT_DEV, MAIL_OWNER } = process.env;
 router.use(express.static("public"));
 router.use(express.json());
 
@@ -99,7 +99,7 @@ const createOrder = async (
         log("PRODUCT:" + product);
 
         if (!product) {
-          log("PRODUCT NOT FOUND")
+          log("PRODUCT NOT FOUND");
           await trx.rollback();
           return;
         }
@@ -140,12 +140,21 @@ const createOrder = async (
 
     log("CARTITEMS CONST" + cartItems);
     Mailer.sendMail({
-      content: Mailer.generateHTML(`Your order has been received.`, cartItems),
+      content: Mailer.generateHTML(
+        `Your order has been received. You will be emailed by the author to provide more details about your request.`,
+        cartItems
+      ),
       recipient: String(MAIL_RECEPIENT_DEV),
       subject: `Order #${order.id}`,
     });
+
+    Mailer.sendMail({
+      content: Mailer.generateHTML(`Items ordered`, cartItems),
+      recipient: String(MAIL_OWNER),
+      subject: `New Order From Customer | Order #${order.id}`,
+    });
+
     log("MAIL RECEIEPIEN DEV: " + String(MAIL_RECEPIENT_DEV));
- 
   } catch (error) {
     log(error);
     log("error u kreaciji order, trx rollback");
@@ -159,7 +168,7 @@ router.post("/cpi", async (req, res) => {
   const formattedItems: any = [];
 
   const session = req.headers.authorization;
- 
+
   items.map((item: any) => {
     const { id, cartId, productId, quantity } = item;
 

@@ -138,7 +138,7 @@ router.post("/", async (req: Request, res: Response) => {
           product_id: item.productId,
         });
         if (existingItem) {
-          existingItem.quantity += item.quantity;
+          existingItem.quantity = 1;
           await existingItem
             .$query()
             .update({ quantity: existingItem.quantity });
@@ -146,7 +146,7 @@ router.post("/", async (req: Request, res: Response) => {
           await CartItem.query().insert({
             cartId: cart.id,
             productId: item.productId,
-            quantity: item.quantity,
+            quantity: 1,
           });
         }
       }
