@@ -26,13 +26,17 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
+    loader: async () => {
+      return getCartData();
+    },
+
     children: [
       {
         path: "/",
         element: <Top />,
         loader: async () => {
           return getProductData();
-        }
+        },
       },
       {
         path: "/cart",

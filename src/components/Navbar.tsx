@@ -1,5 +1,5 @@
 import { FaShoppingCart } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import logo2 from "../assets/logo2.png";
 import { CartService } from "../services/Cart.service";
 
@@ -27,7 +27,7 @@ export const Navbar = () => {
     },
   ];
   const service = new CartService();
-
+  const data = useLoaderData() as any[];
   
   return (
     <form
@@ -59,7 +59,7 @@ export const Navbar = () => {
 
         <div className="flex w-full  max-w-[100px] justify-around">
           <Link to="/cart">
-           
+           <div className="bg-red-500 rounded-full text-center text-white">{data.length}</div>
             <FaShoppingCart className="w-6 h-6 hover:text-orange-600" />
           </Link>
 

@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import {
   addItemsToCart,
   getSessionId,
@@ -9,7 +10,14 @@ export const CardProduct = (props: {
   name: string;
   description: string;
   price: number;
+
 }) => {
+
+  const [buttonText, setButtonText] = useState('Add');
+  const [isDisabled, setIsDisabled] = useState(false);
+ 
+
+  
   return (
     <div className="flex flex-col sm:flex-row m-2 items-center bg-orange-200 shadow-lg">
       <img
@@ -29,18 +37,26 @@ export const CardProduct = (props: {
             </span>
           </div>
           <button
+         disabled={isDisabled}
             onClick={() => {
+
+              setButtonText('Added');
+              setIsDisabled(true);
+
+
               addItemsToCart([{ productId: props.id, quantity: 1 }]).then(
                 (res) => {
                   if (!getSessionId()) {
                     setSessionId(res.sessId);
                   }
+                  setButtonText("Add")
+                  setIsDisabled(false);
                 }
               );
             }}
             className="text-2xl w-full bg-orange-300 rounded-full hover:bg-yellow-400"
           >
-            Add
+            {buttonText}
           </button>
         </div>
       </div>
