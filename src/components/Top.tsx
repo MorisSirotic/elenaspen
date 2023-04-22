@@ -108,6 +108,8 @@ export const Top = () => {
           icon={<FaPenFancy className="flex  m-auto" size="40" />}
         />
       </div>
+
+      <div className="mt-2 bg-orange-600 p-2 font-semibold text-xl">Please Note That You Can Only Buy Maximum One Of Each Per Order - Elena</div>
       <ListProduct />
       {/* <div className="flex flex-col  sm:w-full md:flex-row p-2 justify-center items-center">
         <div className="w-full max-w-5xl h-96 min-w-[300px] p-2">
@@ -138,6 +140,8 @@ export const Top = () => {
           </div>
         </div>
       </div> */}
+
+   
 
       <div className="flex items-center flex-wrap sm:flex-nowrap">
         {/* <CardBottom /> */}
