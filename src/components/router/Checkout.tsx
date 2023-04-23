@@ -8,7 +8,7 @@ import Stripe from "./Stripe";
 
 export const Checkout = () => {
   const stripePromise = loadStripe(
-    "pk_test_51MuJc4I5TlZGfanfJ9dSVLAOfKI19YuBJjO6M6lg45gnv5FHre1z83zynlthMoFqHHgE9k8P1Ixa601CpXzJmBLm00AmNd4kRo"
+    "pk_live_51MuJc4I5TlZGfanfHahFq0ejZ0wn2wsYUGjGfkxPbgHYyjYOKDyxKPe7FgR0eiNODCR2sl4fhYJczbwqu9qrOvza00y2SBNJxa"
   );
 
   const data = useLoaderData() as CartItem[];
