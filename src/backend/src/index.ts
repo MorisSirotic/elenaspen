@@ -55,7 +55,7 @@ export const store = new StoreFactory({ knex: db });
 
 app.use(
   cors({
-    origin: "https://elenaspen.com:5173",
+    origin: "http://localhost:5173",
     allowedHeaders: [
       "Origin",
       " X-Requested-With",
@@ -167,29 +167,33 @@ app.use("/carts", cartItems);
 app.use("/orders", orderItems);
 app.use("/api/stripe", stripe);
 // Load the SSL certificates
-const privateKey = fs.readFileSync(
-  "/etc/letsencrypt/live/elenaspen.com/privkey.pem",
-  "utf8"
-);
-const certificate = fs.readFileSync(
-  "/etc/letsencrypt/live/elenaspen.com/fullchain.pem",
-  "utf8"
-);
-const ca = fs.readFileSync(
-  "/etc/letsencrypt/live/elenaspen.com/chain.pem",
-  "utf8"
-);
+// const privateKey = fs.readFileSync(
+//   "/etc/letsencrypt/live/elenaspen.com/privkey.pem",
+//   "utf8"
+// );
+// const certificate = fs.readFileSync(
+//   "/etc/letsencrypt/live/elenaspen.com/fullchain.pem",
+//   "utf8"
+// );
+// const ca = fs.readFileSync(
+//   "/etc/letsencrypt/live/elenaspen.com/chain.pem",
+//   "utf8"
+// );
 
-const credentials = {
-  // Create a credentials object with the SSL certificates
-  key: privateKey,
-  cert: certificate,
-  ca: ca,
-};
+// const credentials = {
+//   // Create a credentials object with the SSL certificates
+//   key: privateKey,
+//   cert: certificate,
+//   ca: ca,
+// };
 
-const httpsServer = https.createServer(credentials, app); // Create an HTTPS server with the S$
+//const httpsServer = https.createServer(credentials, app); // Create an HTTPS server with the S$
 
-httpsServer.listen(3001, () => {
+// httpsServer.listen(3001, () => {
+//   // Start the HTTPS server on port 3001
+//   console.log("Server listening on port 3001 with HTTPS!");
+// });
+app.listen(3001, () => {
   // Start the HTTPS server on port 3001
-  console.log("Server listening on port 3001 with HTTPS!");
+  console.log("Server listening on port 3001!");
 });

@@ -3,6 +3,7 @@ import express, { NextFunction, Request, Response } from "express";
 import { Stripe } from "stripe";
 import { store } from "..";
 import { Cart } from "../models/Cart";
+import { CartItem } from "../models/CartItem";
 import { Order } from "../models/Order";
 import { OrderItem } from "../models/OrderItem";
 import { Product } from "../models/Product";
@@ -34,7 +35,9 @@ const calculateOrderAmount = (items: any[]) => {
   }
   return (total * 100).toFixed(2);
 };
-
+const calculateFee = (total: number) => {
+  return total * 0.03 + 30;
+};
 // router.post("/cpi", async (req, res) => {
 //   const { items } = req.body;
 
@@ -149,12 +152,32 @@ const createOrder = async (
     });
 
     Mailer.sendMail({
-      content: Mailer.generateHTML(`Items ordered`, cartItems,"Customer: "+ email),
+      content: Mailer.generateHTML(
+        `Items ordered`,
+        cartItems,
+        "Customer: " + email
+      ),
       recipient: String(MAIL_OWNER),
       subject: `New Order From Customer | Order #${order.id}`,
     });
 
     log("MAIL RECEIEPIEN DEV: " + String(MAIL_RECEPIENT_DEV));
+    CartItem.query()
+      .delete()
+      .whereIn(
+        "product_id",
+        cartItems.map((item: any) => item.productId)
+      )
+      .then((aj) => {
+        log("||||||||||||||||||||||||||");
+        log(aj);
+      })
+      .catch((err) => {
+        log("log cart item error");
+        log(err);
+      });
+
+   
   } catch (error) {
     log(error);
     log("error u kreaciji order, trx rollback");
@@ -167,6 +190,8 @@ router.post("/cpi", async (req, res) => {
 
   const formattedItems: any = [];
 
+  //const price = await stripe.prices.retrieve("your_price_id");
+
   const session = req.headers.authorization;
 
   items.map((item: any) => {
@@ -177,6 +202,10 @@ router.post("/cpi", async (req, res) => {
 
   const paymentIntent = await stripe.paymentIntents.create({
     amount: Number(calculateOrderAmount(items)),
+    // transfer_data: {
+    //   destination: "acct_1N0BCYIGigXASqGF",
+    //   amount: Number(calculateFee(Number(calculateOrderAmount(items))).toFixed(0)),
+    // },
     currency: "eur",
     automatic_payment_methods: {
       enabled: true,
@@ -202,6 +231,8 @@ router.post(
     switch (event.type) {
       case "payment_intent.succeeded":
         const _paymentIntent = event.data.object;
+
+        log("i work");
         break;
 
       case "payment_method.attached":

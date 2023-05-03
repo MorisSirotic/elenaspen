@@ -70,7 +70,7 @@ export default function Stripe() {
               email,
             },
           },
-          return_url: "https://elenaspen.com/",
+          return_url: "http://localhost:5173/",
         },
       });
 
@@ -88,35 +88,7 @@ export default function Stripe() {
 
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
-      {/* <div className="bg-white max-w-md mx-auto p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-6">Checkout</h2>
-
-        <label className="block mb-4">
-          <span className="text-gray-700 font-semibold">Name</span>
-          <input
-            type="text"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-            placeholder="John"
-          />
-        </label>
-        <label className="block mb-4">
-          <span className="text-gray-700 font-semibold">Last Name</span>
-          <input
-            type="text"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-            placeholder="Doe"
-          />
-        </label>
-
-        <label className="block mb-4">
-          <span className="text-gray-700 font-semibold">Email Address</span>
-          <input
-            type="text"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-            placeholder="email@address.com"
-          />
-        </label>
-      </div> */}
+    
 
       <LinkAuthenticationElement
         id="link-authentication-element"

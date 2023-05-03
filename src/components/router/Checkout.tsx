@@ -8,14 +8,14 @@ import Stripe from "./Stripe";
 
 export const Checkout = () => {
   const stripePromise = loadStripe(
-    "pk_live_51MuJc4I5TlZGfanfHahFq0ejZ0wn2wsYUGjGfkxPbgHYyjYOKDyxKPe7FgR0eiNODCR2sl4fhYJczbwqu9qrOvza00y2SBNJxa"
+    "pk_test_51MuJc4I5TlZGfanfJ9dSVLAOfKI19YuBJjO6M6lg45gnv5FHre1z83zynlthMoFqHHgE9k8P1Ixa601CpXzJmBLm00AmNd4kRo"
   );
 
   const data = useLoaderData() as CartItem[];
   const [clientSecret, setClientSecret] = useState("");
 
   useEffect(() => {
-    fetch("https://elenaspen.com/api/stripe/cpi", {
+    fetch("http://localhost:3001/api/stripe/cpi", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

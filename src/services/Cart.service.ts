@@ -14,7 +14,7 @@ export class CartService {
   private readonly baseUrl: string;
 
   constructor() {
-    this.baseUrl = "https://elenaspen.com/api/cart";
+    this.baseUrl = "http://localhost:3001/api/cart";
   }
 
   async getCart(): Promise<any> {
@@ -49,7 +49,7 @@ export const addItemsToCart = async (items: any[]): Promise<any> => {
   const sessionId = getSessionId();
   try {
     const response: AxiosResponse = await axios.post(
-      "https://elenaspen.com/api/cart",
+      "http://localhost:3001/api/cart",
       { items },
       {
         headers: { Authorization: sessionId },
